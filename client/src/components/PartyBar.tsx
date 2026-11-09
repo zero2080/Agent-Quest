@@ -8,6 +8,7 @@ import {
   HERO_LABEL_COLOR, SOURCE_BADGE_COLOR, modelBadge, displayActivity, isSubagentAgent, skillShortName,
   type AgentState, type HeroColor,
 } from '../types/agent';
+import { useI18n } from '../i18n';
 import './PartyBar.css';
 
 interface PartyBarProps {
@@ -36,6 +37,7 @@ interface PartyRowProps {
 }
 
 function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCount = 0, isChild = false, parentColor }: PartyRowProps) {
+  const { t } = useI18n();
   const [flashing, setFlashing] = useState(false);
   const prevSelected = useRef(isSelected);
 
@@ -57,7 +59,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
     isChild ? 'partybar-agent--child' : '',
   ].filter(Boolean).join(' ');
 
-  const role = isSubagentAgent(agent) ? (agent.subagentType ?? '서브에이전트') : undefined;
+  const role = isSubagentAgent(agent) ? (agent.subagentType ?? t('hero.subagent')) : undefined;
   const title = mode === 'icons'
     ? `${agent.name}${role !== undefined ? ` (${role})` : ''} · ${displayActivity(agent)}`
     : undefined;
@@ -67,7 +69,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
       type="button"
       className={classes}
       onClick={onClick}
-      aria-label={`${agent.name} 선택${showSourceBadge ? ` (${agent.source})` : ''}${role !== undefined ? `, ${role} 서브에이전트` : ''}, ${displayActivity(agent)}`}
+      aria-label={`${t('partyBar.selectAgent', { name: agent.name })}${showSourceBadge ? ` (${agent.source})` : ''}${role !== undefined ? t('partyBar.roleSubagent', { role }) : ''}, ${displayActivity(agent)}`}
       aria-current={isSelected ? 'true' : undefined}
       title={title}
     >
@@ -85,7 +87,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
               style={isSelected ? undefined : { color: HERO_LABEL_COLOR[agent.heroColor] }}
             >{agent.name}</span>
             {childCount > 0 && (
-              <span className="partybar-child-badge" title={`라이브 서브에이전트 ${childCount}개`}>
+              <span className="partybar-child-badge" title={t('partyBar.liveSubagents', { count: childCount })}>
                 {'⚑'} {childCount}
               </span>
             )}
@@ -95,7 +97,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
             <span
               className="partybar-role"
               style={parentColor !== undefined ? { color: HERO_LABEL_COLOR[parentColor] } : undefined}
-              title={agent.subagentType ?? '서브에이전트'}
+              title={agent.subagentType ?? t('hero.subagent')}
             >
               {'⚔'} {role}
             </span>
@@ -115,7 +117,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
                   borderColor: `${SOURCE_BADGE_COLOR[agent.source]}80`,
                   background: `${SOURCE_BADGE_COLOR[agent.source]}14`,
                 }}
-                aria-label={`소스 ${sourceBadgeLabel(agent)} · ${agent.source}`}
+                aria-label={t('partyBar.sourceAria', { label: sourceBadgeLabel(agent), source: agent.source })}
               >
                 {sourceBadgeLabel(agent)}
               </span>
@@ -131,7 +133,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
                     borderColor: `${badge.color}80`,
                     background: `${badge.color}14`,
                   }}
-                  aria-label={`모델 ${agent.model ?? ''}`}
+                  aria-label={t('partyBar.modelAria', { model: agent.model ?? '' })}
                   title={agent.model}
                 >
                   {badge.short}
@@ -149,6 +151,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
 const LIVE_STATUSES = new Set<AgentState['status']>(['active', 'waiting', 'idle']);
 
 export function PartyBar({ agents, selectedAgentId, onSelectAgent, showSourceBadge }: PartyBarProps) {
+  const { t } = useI18n();
   const [prefs, updatePrefs] = usePartyPrefs();
   const mode: 'full' | 'icons' = prefs.foldState;
   const [showCompleted, setShowCompleted] = useState(false);
@@ -169,9 +172,9 @@ export function PartyBar({ agents, selectedAgentId, onSelectAgent, showSourceBad
     .filter((a) => a.status === 'completed')
     .sort((a, b) => b.lastEvent - a.lastEvent);
 
-  const headerParts = [`활동 중 ${activeCount}`];
-  if (waitingCount > 0) headerParts.push(`대기 중 ${waitingCount}`);
-  headerParts.push(`유휴 ${idleCount}`);
+  const headerParts = [t('partyBar.headerActive', { count: activeCount })];
+  if (waitingCount > 0) headerParts.push(t('partyBar.headerWaiting', { count: waitingCount }));
+  headerParts.push(t('partyBar.headerIdle', { count: idleCount }));
 
   const toggleFold = useCallback(() => {
     updatePrefs({ foldState: mode === 'full' ? 'icons' : 'full' });
@@ -182,17 +185,17 @@ export function PartyBar({ agents, selectedAgentId, onSelectAgent, showSourceBad
   }, [onSelectAgent]);
 
   return (
-    <div className={`partybar mode-${mode}`} role="list" aria-label="파티">
+    <div className={`partybar mode-${mode}`} role="list" aria-label={t('partyBar.party')}>
       <div className="partybar-header">
         {mode === 'full' ? (
-          <span className="partybar-title">파티 ({headerParts.join(', ')})</span>
+          <span className="partybar-title">{t('partyBar.partyTitle', { parts: headerParts.join(', ') })}</span>
         ) : (
           <span className="partybar-title-compact">{live.length}</span>
         )}
         <button
           type="button"
           className="partybar-fold-btn"
-          aria-label={mode === 'full' ? '아이콘으로 접기' : '파티 펼치기'}
+          aria-label={mode === 'full' ? t('partyBar.collapseToIcons') : t('partyBar.expandParty')}
           aria-pressed={mode === 'icons'}
           onClick={toggleFold}
         >{mode === 'full' ? '◀' : '▶'}</button>
@@ -232,11 +235,11 @@ export function PartyBar({ agents, selectedAgentId, onSelectAgent, showSourceBad
             className="partybar-completed-header"
             aria-expanded={showCompleted}
             onClick={() => setShowCompleted((v) => !v)}
-            title={`완료된 세션 ${completed.length}개`}
+            title={t('partyBar.completedSessions', { count: completed.length })}
           >
             <span className="partybar-completed-caret" aria-hidden="true">{showCompleted ? '▾' : '▸'}</span>
             {mode === 'full'
-              ? <span>완료 ({completed.length})</span>
+              ? <span>{t('partyBar.completed', { count: completed.length })}</span>
               : <span className="partybar-completed-count">{completed.length}✓</span>}
           </button>
           {showCompleted && (

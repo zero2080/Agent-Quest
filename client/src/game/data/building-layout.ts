@@ -1,4 +1,5 @@
 import type { AgentActivity } from '../../types/agent';
+import { hasMessage, t } from '../../i18n';
 
 export interface BuildingDef {
   id: string;
@@ -35,14 +36,14 @@ export const PLAZA = { x: 1320, y: 790 };
  * (≈700×550 spread) so the whole interactive map is readable without zoom-out.
  */
 export const BUILDING_DEFS: BuildingDef[] = [
-  { id: 'library',    label: '도서관',     activity: 'reading',   x: 1060, y: 600,  imageKey: 'building-library',    scale: 0.52, description: '에이전트가 코드를 읽고 검색하러 오는 곳',                toolCalls: ['Read', 'Grep', 'Glob'] },
-  { id: 'alchemist',  label: '연금술사',   activity: 'debugging', x: 1210, y: 460,  imageKey: 'building-alchemist',  scale: 0.50, description: '에이전트가 디버깅하고 오류를 고치러 오는 곳',                toolCalls: ['(오류 후 수정)'] },
-  { id: 'castle',     label: '성',         activity: 'thinking',  x: 1430, y: 430,  imageKey: 'building-castle',     scale: 0.46, description: '에이전트가 생각하고 추론하러 오는 곳',                    toolCalls: ['(AI 사고/계획)'] },
-  { id: 'watchtower', label: '망루',       activity: 'reviewing', x: 1650, y: 470,  imageKey: 'building-watchtower', scale: 0.42, description: '에이전트가 코드를 검토하고 서브에이전트를 보내는 곳',  toolCalls: ['Agent', 'review'] },
-  { id: 'chapel',     label: '예배당',     activity: 'git',       x: 1790, y: 610,  imageKey: 'building-chapel',     scale: 0.38, description: '에이전트가 코드를 커밋하고 푸시하러 오는 곳',                toolCalls: ['git commit', 'git push', 'git merge'] },
-  { id: 'tavern',     label: '선술집',     activity: 'idle',      x: 1510, y: 810,  imageKey: 'building-tavern',     scale: 0.50, description: '에이전트가 사용자 입력을 기다리며 쉬는 곳',           toolCalls: ['(유휴/대기)'] },
-  { id: 'forge',      label: '대장간',     activity: 'editing',   x: 1150, y: 970,  imageKey: 'building-forge',      scale: 0.42, description: '에이전트가 코드를 작성하고 편집하러 오는 곳',                 toolCalls: ['Edit', 'Write'] },
-  { id: 'arena',      label: '투기장',     activity: 'bash',      x: 1700, y: 970,  imageKey: 'building-arena',      scale: 0.42, description: '에이전트가 명령과 테스트를 실행하러 오는 곳',              toolCalls: ['Bash'] },
+  { id: 'library',    label: 'Library',    activity: 'reading',   x: 1060, y: 600,  imageKey: 'building-library',    scale: 0.52, description: 'Agents come here to read and search code',                toolCalls: ['Read', 'Grep', 'Glob'] },
+  { id: 'alchemist',  label: 'Alchemist',  activity: 'debugging', x: 1210, y: 460,  imageKey: 'building-alchemist',  scale: 0.50, description: 'Agents come here to debug and fix errors',                toolCalls: ['(fixing after errors)'] },
+  { id: 'castle',     label: 'Castle',     activity: 'thinking',  x: 1430, y: 430,  imageKey: 'building-castle',     scale: 0.46, description: 'Agents come here to think and reason',                    toolCalls: ['(AI thinking/planning)'] },
+  { id: 'watchtower', label: 'Watchtower', activity: 'reviewing', x: 1650, y: 470,  imageKey: 'building-watchtower', scale: 0.42, description: 'Agents come here to review code and dispatch subagents',  toolCalls: ['Agent', 'review'] },
+  { id: 'chapel',     label: 'Chapel',     activity: 'git',       x: 1790, y: 610,  imageKey: 'building-chapel',     scale: 0.38, description: 'Agents come here to commit and push code',                toolCalls: ['git commit', 'git push', 'git merge'] },
+  { id: 'tavern',     label: 'Tavern',     activity: 'idle',      x: 1510, y: 810,  imageKey: 'building-tavern',     scale: 0.50, description: 'Agents rest here while waiting for user input',           toolCalls: ['(idle/waiting)'] },
+  { id: 'forge',      label: 'Forge',      activity: 'editing',   x: 1150, y: 970,  imageKey: 'building-forge',      scale: 0.42, description: 'Agents come here to write and edit code',                 toolCalls: ['Edit', 'Write'] },
+  { id: 'arena',      label: 'Arena',      activity: 'bash',      x: 1700, y: 970,  imageKey: 'building-arena',      scale: 0.42, description: 'Agents come here to run commands and tests',              toolCalls: ['Bash'] },
 ];
 
 /** South gate — where heroes first spawn before walking into the village. */
@@ -57,4 +58,16 @@ export const NPC_VILLAGE = { x: 2420, y: 1430, radius: 180 };
 export function getBuildingForActivity(activity: AgentActivity): BuildingDef {
   const building = BUILDING_DEFS.find((b) => b.activity === activity);
   return building ?? BUILDING_DEFS.find((b) => b.activity === 'idle')!;
+}
+
+/** Localized building name; falls back to the English `label` for ids without translations. */
+export function buildingName(def: Pick<BuildingDef, 'id' | 'label'>): string {
+  const key = `building.${def.id}.name`;
+  return hasMessage(key) ? t(key) : def.label;
+}
+
+/** Localized building description; falls back to the English `description`. */
+export function buildingDescription(def: Pick<BuildingDef, 'id' | 'description'>): string {
+  const key = `building.${def.id}.description`;
+  return hasMessage(key) ? t(key) : def.description;
 }

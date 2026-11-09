@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useI18n } from '../i18n';
 import './NoInstallBanner.css';
 import { isDismissed, setDismissed, resetDismissal } from './noInstallBannerStorage';
 
@@ -18,6 +19,7 @@ interface Props {
  * so returning users don't see it every load.
  */
 export function NoInstallBanner({ configDirs, connected }: Props) {
+  const { t } = useI18n();
   const [dismissed, setDismissedState] = useState<boolean>(() => isDismissed());
 
   // Reset dismissal if a config dir appears later (user installed Claude Code
@@ -43,17 +45,16 @@ export function NoInstallBanner({ configDirs, connected }: Props) {
     <div className="no-install-banner" role="status">
       <span className="no-install-icon" aria-hidden>⚠</span>
       <div className="no-install-body">
-        <div className="no-install-title">Claude Code 또는 Codex 설치가 감지되지 않았습니다</div>
+        <div className="no-install-title">{t('noInstall.title')}</div>
         <div className="no-install-text">
-          서버가 세션 로그가 있는 <code>~/.claude*</code> 또는 <code>~/.codex</code> 디렉터리를 찾지 못했습니다.
-          {' '}Claude Code 또는 Codex 세션을 시작하면 여기에 영웅이 나타납니다.
+          {t('noInstall.textBefore')}<code>~/.claude*</code>{t('noInstall.textOr')}<code>~/.codex</code>{t('noInstall.textAfter')}
         </div>
       </div>
       <button
         className="no-install-dismiss"
         type="button"
         onClick={onDismiss}
-        aria-label="닫기"
+        aria-label={t('common.dismiss')}
       >
         ×
       </button>

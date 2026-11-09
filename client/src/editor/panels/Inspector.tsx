@@ -1,6 +1,7 @@
 import { editorBridge } from '../EditorBridge';
 import { editorStore, useEditorStore } from '../state/editor-store';
 import type { UnitColor, UnitType } from '../types/map';
+import { useI18n } from '../../i18n';
 
 // Kept as fallbacks only — the actual option lists shown in the NPC
 // dropdowns are derived from the active manifest's npcSprites so themes
@@ -10,6 +11,7 @@ const NPC_UNITS_FALLBACK: UnitType[] = ['warrior', 'archer', 'pawn'];
 const NPC_COLORS_FALLBACK: UnitColor[] = ['blue', 'red', 'black', 'yellow', 'purple'];
 
 export function Inspector() {
+  const { t } = useI18n();
   const selection = useEditorStore((s) => s.selection);
   const stats = useEditorStore((s) => s.stats);
   const heroScale = useEditorStore((s) => s.heroScale);
@@ -20,31 +22,31 @@ export function Inspector() {
   if (selection === null) {
     return (
       <div className="editor-inspector">
-        <div className="editor-palette-header">통계</div>
+        <div className="editor-palette-header">{t('editor.inspector.statistics')}</div>
         <div className="editor-stat">
-          <span className="editor-stat-label">지형 셀</span>
+          <span className="editor-stat-label">{t('editor.inspector.terrainCells')}</span>
           <span className="editor-stat-value">{stats.terrainCells}</span>
         </div>
         <div className="editor-stat">
-          <span className="editor-stat-label">장식</span>
+          <span className="editor-stat-label">{t('editor.inspector.decorations')}</span>
           <span className="editor-stat-value">{stats.decorations}</span>
         </div>
         <div className="editor-stat">
-          <span className="editor-stat-label">길</span>
+          <span className="editor-stat-label">{t('editor.inspector.paths')}</span>
           <span className="editor-stat-value">{stats.paths}</span>
         </div>
         <div className="editor-stat">
-          <span className="editor-stat-label">건물</span>
+          <span className="editor-stat-label">{t('editor.inspector.buildings')}</span>
           <span className="editor-stat-value">{stats.buildings}</span>
         </div>
         <div className="editor-stat">
-          <span className="editor-stat-label">NPC</span>
+          <span className="editor-stat-label">{t('editor.inspector.npcs')}</span>
           <span className="editor-stat-value">{stats.npcs}</span>
         </div>
 
-        <div className="editor-palette-header" style={{ marginTop: 8 }}>설정</div>
+        <div className="editor-palette-header" style={{ marginTop: 8 }}>{t('editor.inspector.settings')}</div>
         <div className="editor-row">
-          <label>영웅 크기</label>
+          <label>{t('editor.inspector.heroScale')}</label>
           <input
             type="range"
             min="0.15"
@@ -66,14 +68,14 @@ export function Inspector() {
   if (selection.kind === 'decoration') {
     return (
       <div className="editor-inspector">
-        <div className="editor-palette-header">장식</div>
-        <div className="editor-inspector-label">아이디</div>
+        <div className="editor-palette-header">{t('editor.inspector.decoration')}</div>
+        <div className="editor-inspector-label">{t('editor.inspector.id')}</div>
         <div className="editor-inspector-value" style={{ fontSize: 10 }}>{selection.id}</div>
-        <div className="editor-inspector-label">텍스처</div>
+        <div className="editor-inspector-label">{t('editor.inspector.texture')}</div>
         <div className="editor-inspector-value">{selection.textureKey}</div>
-        <div className="editor-inspector-label">위치</div>
+        <div className="editor-inspector-label">{t('editor.inspector.position')}</div>
         <div className="editor-inspector-value">{Math.round(selection.x)}, {Math.round(selection.y)}</div>
-        <div className="editor-inspector-label">크기</div>
+        <div className="editor-inspector-label">{t('editor.inspector.scale')}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <input
             type="range"
@@ -86,7 +88,7 @@ export function Inspector() {
           />
           <span className="editor-inspector-value">{selection.scale.toFixed(2)}</span>
         </div>
-        <button className="editor-btn danger" onClick={onDelete}>삭제</button>
+        <button className="editor-btn danger" onClick={onDelete}>{t('common.delete')}</button>
       </div>
     );
   }
@@ -94,14 +96,14 @@ export function Inspector() {
   if (selection.kind === 'building') {
     return (
       <div className="editor-inspector">
-        <div className="editor-palette-header">건물</div>
-        <div className="editor-inspector-label">아이디</div>
+        <div className="editor-palette-header">{t('editor.inspector.building')}</div>
+        <div className="editor-inspector-label">{t('editor.inspector.id')}</div>
         <div className="editor-inspector-value">{selection.id}</div>
-        <div className="editor-inspector-label">라벨</div>
+        <div className="editor-inspector-label">{t('editor.inspector.label')}</div>
         <div className="editor-inspector-value">{selection.label}</div>
-        <div className="editor-inspector-label">위치</div>
+        <div className="editor-inspector-label">{t('editor.inspector.position')}</div>
         <div className="editor-inspector-value">{Math.round(selection.x)}, {Math.round(selection.y)}</div>
-        <div style={{ fontSize: 10, color: '#888' }}>위치를 변경하려면 "건물 이동" 도구를 사용하세요.</div>
+        <div style={{ fontSize: 10, color: '#888' }}>{t('editor.inspector.moveBuildingHint')}</div>
       </div>
     );
   }
@@ -138,11 +140,11 @@ export function Inspector() {
 
     return (
       <div className="editor-inspector">
-        <div className="editor-palette-header">NPC</div>
-        <div className="editor-inspector-label">아이디</div>
+        <div className="editor-palette-header">{t('editor.inspector.npc')}</div>
+        <div className="editor-inspector-label">{t('editor.inspector.id')}</div>
         <div className="editor-inspector-value" style={{ fontSize: 10 }}>{selection.id}</div>
 
-        <div className="editor-inspector-label">유닛 종류</div>
+        <div className="editor-inspector-label">{t('editor.inspector.unitType')}</div>
         <select
           value={selection.unit}
           onChange={(e) => onNpcChange({ unit: e.target.value as UnitType })}
@@ -152,7 +154,7 @@ export function Inspector() {
           ))}
         </select>
 
-        <div className="editor-inspector-label">색상</div>
+        <div className="editor-inspector-label">{t('editor.inspector.color')}</div>
         <select
           value={selection.color}
           onChange={(e) => onNpcChange({ color: e.target.value as UnitColor })}
@@ -162,10 +164,10 @@ export function Inspector() {
           ))}
         </select>
 
-        <div className="editor-inspector-label">위치</div>
+        <div className="editor-inspector-label">{t('editor.inspector.position')}</div>
         <div className="editor-inspector-value">{Math.round(selection.x)}, {Math.round(selection.y)}</div>
 
-        <div className="editor-inspector-label">크기</div>
+        <div className="editor-inspector-label">{t('editor.inspector.scale')}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <input
             type="range"
@@ -179,7 +181,7 @@ export function Inspector() {
           <span className="editor-inspector-value">{selection.scale.toFixed(2)}</span>
         </div>
 
-        <div className="editor-inspector-label">배회 반경</div>
+        <div className="editor-inspector-label">{t('editor.inspector.wanderRadius')}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <input
             type="range"
@@ -193,7 +195,7 @@ export function Inspector() {
           <span className="editor-inspector-value">{selection.wanderRadius}</span>
         </div>
 
-        <button className="editor-btn danger" onClick={onDelete}>삭제</button>
+        <button className="editor-btn danger" onClick={onDelete}>{t('common.delete')}</button>
       </div>
     );
   }
@@ -202,21 +204,21 @@ export function Inspector() {
     const onReset = () => editorBridge.emit('ed:spawn:clear');
     return (
       <div className="editor-inspector">
-        <div className="editor-palette-header">영웅 스폰</div>
-        <div className="editor-inspector-label">상태</div>
+        <div className="editor-palette-header">{t('editor.inspector.heroSpawn')}</div>
+        <div className="editor-inspector-label">{t('editor.inspector.status')}</div>
         <div className="editor-inspector-value">
-          {selection.isSet ? '사용자 지정' : '기본값 (설정 안 됨)'}
+          {selection.isSet ? t('editor.inspector.spawnCustom') : t('editor.inspector.spawnDefault')}
         </div>
-        <div className="editor-inspector-label">위치</div>
+        <div className="editor-inspector-label">{t('editor.inspector.position')}</div>
         <div className="editor-inspector-value">
           {Math.round(selection.x)}, {Math.round(selection.y)}
         </div>
         <div style={{ fontSize: 10, color: '#888', marginTop: 4 }}>
-          영웅은 첫 건물로 이동하기 전에 이곳에 나타납니다. 위치를 옮기려면 🚩 도구를 사용하세요.
+          {t('editor.inspector.spawnHint')}
         </div>
         {selection.isSet && (
           <button className="editor-btn" onClick={onReset} style={{ marginTop: 8 }}>
-            기본값으로 초기화
+            {t('editor.inspector.resetToDefault')}
           </button>
         )}
       </div>
@@ -226,16 +228,16 @@ export function Inspector() {
   // path
   return (
     <div className="editor-inspector">
-      <div className="editor-palette-header">길</div>
-      <div className="editor-inspector-label">아이디</div>
+      <div className="editor-palette-header">{t('editor.inspector.path')}</div>
+      <div className="editor-inspector-label">{t('editor.inspector.id')}</div>
       <div className="editor-inspector-value" style={{ fontSize: 10 }}>{selection.id}</div>
-      <div className="editor-inspector-label">스타일</div>
+      <div className="editor-inspector-label">{t('editor.inspector.style')}</div>
       <div className="editor-inspector-value">{selection.style}</div>
-      <div className="editor-inspector-label">점 개수</div>
+      <div className="editor-inspector-label">{t('editor.inspector.points')}</div>
       <div className="editor-inspector-value">{selection.pointCount}</div>
-      <div className="editor-inspector-label">너비</div>
+      <div className="editor-inspector-label">{t('editor.inspector.width')}</div>
       <div className="editor-inspector-value">{selection.width}</div>
-      <button className="editor-btn danger" onClick={onDelete}>삭제</button>
+      <button className="editor-btn danger" onClick={onDelete}>{t('common.delete')}</button>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 export const HERO_CLASSES = ['warrior', 'archer', 'pawn'] as const;
 export type HeroClass = (typeof HERO_CLASSES)[number];
 
@@ -238,41 +239,28 @@ export function isSubagentAgent(a: Pick<AgentState, 'id' | 'isSubagent'>): boole
  * a `waiting`/`completed` agent (whose `currentActivity` the server sets to
  * `idle`) would read as "idle" everywhere except the hero label.
  */
-/** Korean display label for each activity key. */
-export const ACTIVITY_LABEL: Record<AgentActivity, string> = {
-  reading: '읽는 중',
-  editing: '편집 중',
-  bash: '명령 실행 중',
-  thinking: '생각 중',
-  git: 'Git 작업 중',
-  idle: '휴식 중',
-  debugging: '디버깅 중',
-  reviewing: '검토 중',
-};
+/** Localized label for an activity key (see i18n `activity.*`). */
+export function activityLabel(activity: AgentActivity): string {
+  return t(`activity.${activity}`);
+}
 
-/** Korean display label for each session status. */
-export const STATUS_LABEL: Record<AgentState['status'], string> = {
-  active: '활동 중',
-  waiting: '대기 중',
-  idle: '유휴',
-  completed: '완료',
-  error: '오류',
-};
+/** Localized label for a session status (see i18n `status.*`). */
+export function statusLabel(status: AgentState['status']): string {
+  return t(`status.${status}`);
+}
 
-/** Korean display label for each hero class. */
-export const HERO_CLASS_LABEL: Record<HeroClass, string> = {
-  warrior: '전사',
-  archer: '궁수',
-  pawn: '폰',
-};
+/** Localized label for a hero class (see i18n `heroClass.*`). */
+export function heroClassLabel(heroClass: HeroClass): string {
+  return t(`heroClass.${heroClass}`);
+}
 
 export function displayActivity(agent: Pick<AgentState, 'status' | 'currentActivity'>): string {
   switch (agent.status) {
-    case 'waiting': return STATUS_LABEL.waiting;
-    case 'completed': return STATUS_LABEL.completed;
-    case 'error': return STATUS_LABEL.error;
-    case 'idle': return STATUS_LABEL.idle;
-    case 'active': return ACTIVITY_LABEL[agent.currentActivity] ?? agent.currentActivity;
+    case 'waiting': return statusLabel('waiting');
+    case 'completed': return statusLabel('completed');
+    case 'error': return statusLabel('error');
+    case 'idle': return statusLabel('idle');
+    case 'active': return activityLabel(agent.currentActivity);
   }
 }
 

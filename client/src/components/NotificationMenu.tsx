@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { ToastPayload } from '../hooks/useAgentNotifications';
+import { t, useI18n } from '../i18n';
 import './NotificationMenu.css';
 
 export interface NotificationEntry extends ToastPayload {
@@ -27,12 +28,12 @@ const CATEGORY_ICON: Record<ToastPayload['category'], string> = {
 
 function relativeTime(ts: number): string {
   const s = Math.max(0, Math.floor((Date.now() - ts) / 1000));
-  if (s < 10) return '방금 전';
-  if (s < 60) return `${s}초 전`;
+  if (s < 10) return t('common.justNow');
+  if (s < 60) return t('common.secondsAgo', { count: s });
   const m = Math.floor(s / 60);
-  if (m < 60) return `${m}분 전`;
+  if (m < 60) return t('common.minutesAgo', { count: m });
   const h = Math.floor(m / 60);
-  return `${h}시간 전`;
+  return t('common.hoursAgo', { count: h });
 }
 
 /**
@@ -42,6 +43,7 @@ function relativeTime(ts: number): string {
  * they're suppressed upstream — so this stays a main-agent activity log.
  */
 export function NotificationMenu({ entries, unread, open, onToggle, onActivate, onClear }: NotificationMenuProps) {
+  const { t } = useI18n();
   const wrapRef = useRef<HTMLDivElement>(null);
 
   // Close on outside-click / Escape while open.
@@ -67,23 +69,23 @@ export function NotificationMenu({ entries, unread, open, onToggle, onActivate, 
         onClick={onToggle}
         aria-haspopup="true"
         aria-expanded={open}
-        aria-label={`알림${unread > 0 ? ` (읽지 않음 ${unread}개)` : ''}`}
-        title="알림"
+        aria-label={unread > 0 ? t('notificationMenu.bellUnread', { count: unread }) : t('notificationMenu.title')}
+        title={t('notificationMenu.title')}
       >
         {'\u{1F514}'}
         {unread > 0 && <span className="notif-badge">{unread > 9 ? '9+' : unread}</span>}
       </button>
 
       {open && (
-        <div className="notif-dropdown" role="dialog" aria-label="최근 알림">
+        <div className="notif-dropdown" role="dialog" aria-label={t('notificationMenu.recent')}>
           <div className="notif-dropdown-header">
-            <span>알림</span>
+            <span>{t('notificationMenu.title')}</span>
             {entries.length > 0 && (
-              <button type="button" className="notif-clear" onClick={onClear}>지우기</button>
+              <button type="button" className="notif-clear" onClick={onClear}>{t('notificationMenu.clear')}</button>
             )}
           </div>
           {entries.length === 0 ? (
-            <div className="notif-empty">아직 알림이 없습니다.</div>
+            <div className="notif-empty">{t('notificationMenu.empty')}</div>
           ) : (
             <ul className="notif-list">
               {entries.map((e) => (

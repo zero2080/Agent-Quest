@@ -27,7 +27,7 @@ bun start
 ## PR을 열기 전에
 
 - TypeScript strict를 유지하세요. `any`는 쓰지 않습니다.
-- 코드와 식별자는 영어로 작성합니다.
+- 코드와 식별자는 영어로 작성합니다. UI 문자열은 `t()` / `useI18n()`(`client/src/i18n`)을 거치며, 새 키는 `locales/en/*.json`(기본)과 `locales/ko/*.json`에 함께 추가합니다.
 - 커밋 메시지는 conventional 스타일을 따릅니다: `feat:`, `fix:`, `refactor:`, `docs:` 등.
 - 서버 코드를 건드렸다면 `cd server && bun test`를 실행하세요.
 - UI를 바꿨다면 PR 설명에 스크린샷이나 짧은 클립을 넣어 주세요.

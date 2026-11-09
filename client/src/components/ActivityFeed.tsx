@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ActivityLogEntry, AgentState } from '../types/agent';
 import { useFeedPrefs, type FoldState } from '../hooks/useFeedPrefs';
+import { useI18n } from '../i18n';
 import { ActivityFeedHeader } from './ActivityFeedHeader';
 import { ActivityRow } from './ActivityRow';
 import {
@@ -20,6 +21,7 @@ interface ActivityFeedProps {
 const SCROLL_PIN_THRESHOLD_PX = 8;
 
 export function ActivityFeed({ log, agents, selectedAgentId, onSelectAgent, showSourceBadge }: ActivityFeedProps) {
+  const { t } = useI18n();
   const [prefs, updatePrefs] = useFeedPrefs();
   const { foldState, activeHighlights, agentFilter } = prefs;
 
@@ -162,15 +164,15 @@ export function ActivityFeed({ log, agents, selectedAgentId, onSelectAgent, show
         <div className="feed-list-wrap">
           {!pinned && newSinceUnpin > 0 && (
             <button type="button" className="feed-jump-latest" onClick={jumpToLatest}>
-              ↑ 최신으로 이동 (새 항목 {newSinceUnpin}개)
+              {t('activityFeed.jumpToLatest', { count: newSinceUnpin })}
             </button>
           )}
 
           <div className="feed-list" role="list" ref={listRef} onScroll={onScroll}>
             {filtered.length === 0 ? (
               <div className="feed-empty">
-                <div>에이전트 활동을 기다리는 중...</div>
-                <div className="feed-empty-hint">아무 프로젝트에서 Claude Code 또는 Codex를 실행하면 여기에 표시됩니다.</div>
+                <div>{t('activityFeed.emptyTitle')}</div>
+                <div className="feed-empty-hint">{t('activityFeed.emptyHint')}</div>
               </div>
             ) : (
               filtered.map((entry) => {

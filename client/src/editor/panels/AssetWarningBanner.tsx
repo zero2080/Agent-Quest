@@ -1,4 +1,5 @@
 import { editorStore, useEditorStore } from '../state/editor-store';
+import { useI18n } from '../../i18n';
 
 /**
  * Non-blocking banner that appears at the top of the editor when one or
@@ -7,6 +8,7 @@ import { editorStore, useEditorStore } from '../state/editor-store';
  * points to a restore command. Dismissible per session.
  */
 export function AssetWarningBanner() {
+  const { t } = useI18n();
   const errors = useEditorStore((s) => s.assetErrors);
   const dismissed = useEditorStore((s) => s.assetErrorsDismissed);
 
@@ -21,13 +23,13 @@ export function AssetWarningBanner() {
       <div className="editor-asset-banner-head">
         <span className="editor-asset-banner-icon" aria-hidden>⚠</span>
         <span className="editor-asset-banner-title">
-          에셋 {errors.total}개를 불러오지 못했습니다
+          {t('editor.assets.failed', { count: errors.total })}
         </span>
         <button
           className="editor-asset-banner-dismiss"
           type="button"
           onClick={() => editorStore.dismissAssetErrors()}
-          aria-label="닫기"
+          aria-label={t('common.dismiss')}
         >
           ×
         </button>
@@ -41,15 +43,15 @@ export function AssetWarningBanner() {
           ))}
         </ul>
         <details className="editor-asset-banner-details">
-          <summary>누락된 파일 보기</summary>
+          <summary>{t('editor.assets.showMissing')}</summary>
           <ul>
             {samples.map((p) => (
               <li key={p}><code>{p}</code></li>
             ))}
-            {overflow > 0 && <li>…외 {overflow}개</li>}
+            {overflow > 0 && <li>{t('editor.assets.andMore', { count: overflow })}</li>}
           </ul>
           <p className="editor-asset-banner-hint">
-            <code>git checkout -- client/public/assets/themes/tiny-swords-cc0/</code> 명령으로 복원할 수 있습니다
+            {t('editor.assets.restorePrefix')}<code>git checkout -- client/public/assets/themes/tiny-swords-cc0/</code>{t('editor.assets.restoreSuffix')}
           </p>
         </details>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { AgentState } from '../types/agent';
 import type { AppSettings } from './useSettings';
+import { t } from '../i18n';
 import { playChime, type ChimeKind } from '../notifications/sound';
 import { computeAlerts, type AgentAlert, type AgentSnapshot } from '../notifications/transitions';
 
@@ -24,19 +25,19 @@ function categoryEnabled(s: AppSettings, c: ChimeKind): boolean {
 
 function titleFor(a: AgentAlert): string {
   switch (a.category) {
-    case 'waiting': return `${a.name} — 차례입니다`;
-    case 'error': return `${a.name} — 오류`;
-    case 'completed': return `${a.name} — 완료`;
-    case 'context': return `${a.name} — 컨텍스트 거의 가득 참`;
+    case 'waiting': return t('notifications.titleWaiting', { name: a.name });
+    case 'error': return t('notifications.titleError', { name: a.name });
+    case 'completed': return t('notifications.titleCompleted', { name: a.name });
+    case 'context': return t('notifications.titleContext', { name: a.name });
   }
 }
 
 function bodyFor(a: AgentAlert): string {
   switch (a.category) {
-    case 'waiting': return '차례를 마치고 기다리고 있습니다.';
-    case 'error': return '오류가 발생했습니다.';
-    case 'completed': return '세션이 완료되었습니다.';
-    case 'context': return '컨텍스트 윈도우가 85%를 넘었습니다 — 곧 컴팩션이 예상됩니다.';
+    case 'waiting': return t('notifications.bodyWaiting');
+    case 'error': return t('notifications.bodyError');
+    case 'completed': return t('notifications.bodyCompleted');
+    case 'context': return t('notifications.bodyContext');
   }
 }
 

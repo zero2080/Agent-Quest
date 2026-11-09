@@ -6,6 +6,7 @@ import { addCrispText } from '../text';
 import { getActiveTheme } from '../themes/registry';
 import { groupMissingByCategory } from '../data/asset-diagnostics';
 import { sceneRenderScale } from '../dpr';
+import { t } from '../../i18n';
 
 
 
@@ -20,7 +21,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
-    setStartupStatus('마을 에셋을 불러오는 중…');
+    setStartupStatus(t('boot.loadingAssets'));
     this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
       this.missingAssets.push(file.src);
     });
@@ -114,7 +115,7 @@ export class BootScene extends Phaser.Scene {
       const n = this.missingAssets.length;
       const grouped = groupMissingByCategory(this.missingAssets);
 
-      const headline = `번들된 에셋 팩에서 파일 ${n}개가 누락되었습니다.`;
+      const headline = t('boot.missingHeadline', { count: n });
       this.statusText = addCrispText(this, cx, statusY, headline, {
         fontSize: '16px',
         color: '#f0d89a',
@@ -144,7 +145,7 @@ export class BootScene extends Phaser.Scene {
       const overflow = n - samples.length;
       const sampleLines =
         samples.map((p) => `  ${p}`).join('\n') +
-        (overflow > 0 ? `\n  …외 ${overflow}개` : '');
+        (overflow > 0 ? `\n  ${t('boot.andMore', { count: overflow })}` : '');
       const sample = addCrispText(this, cx, summary.y + summary.displayHeight + 16, sampleLines, {
         fontSize: '11px',
         color: '#8ea0b4',
@@ -153,9 +154,7 @@ export class BootScene extends Phaser.Scene {
         wordWrap: { width: Math.min(vw * 0.9, 780) },
       }).setOrigin(0.5, 0);
 
-      const hintText =
-        '다음 명령으로 복구하세요:\n   git checkout -- client/public/assets/themes/tiny-swords-cc0/\n' +
-        '또는 저장소를 다시 클론하세요.';
+      const hintText = t('boot.restoreHint');
       const hint = addCrispText(this, cx, sample.y + sample.displayHeight + 20, hintText, {
         fontSize: '12px',
         color: '#aabbcc',
@@ -164,7 +163,7 @@ export class BootScene extends Phaser.Scene {
         wordWrap: { width: Math.min(vw * 0.9, 720) },
       }).setOrigin(0.5, 0);
 
-      const primary = addCrispText(this, cx, hint.y + hint.displayHeight + 24, '↻  페이지 새로 고침', {
+      const primary = addCrispText(this, cx, hint.y + hint.displayHeight + 24, t('boot.reload'), {
           fontSize: '16px',
           color: '#1a1a2e',
           fontFamily: 'monospace',
@@ -179,8 +178,8 @@ export class BootScene extends Phaser.Scene {
       return;
     }
 
-    setStartupStatus('서버에 연결하는 중…');
-    this.statusText = addCrispText(this, cx, statusY, '서버에 연결하는 중...', {
+    setStartupStatus(t('boot.connecting'));
+    this.statusText = addCrispText(this, cx, statusY, t('boot.connecting'), {
       fontSize: '18px',
       color: '#888888',
       fontFamily: 'monospace',
@@ -190,8 +189,8 @@ export class BootScene extends Phaser.Scene {
       if (this.hasTransitioned) return;
       this.hasTransitioned = true;
       try {
-        setStartupStatus('마을을 준비하는 중…');
-        this.statusText.setText('연결됨! 마을로 들어갑니다...');
+        setStartupStatus(t('boot.preparing'));
+        this.statusText.setText(t('boot.connected'));
         this.time.delayedCall(800, () => {
           this.scene.start('VillageScene');
         });

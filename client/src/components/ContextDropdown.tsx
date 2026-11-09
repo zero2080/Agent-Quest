@@ -1,8 +1,9 @@
 import { isXcodeAgent } from '../types/sessionIdentity';
 import { useEffect, useRef } from 'react';
-import { HERO_LABEL_COLOR, STATUS_LABEL, contextLevel, formatTokens, modelBadge, type AgentState } from '../types/agent';
+import { HERO_LABEL_COLOR, statusLabel, contextLevel, formatTokens, modelBadge, type AgentState } from '../types/agent';
 import { rankContextAgents } from '../report/contextRanking';
 import { ContextMeter } from './ContextMeter';
+import { useI18n } from '../i18n';
 import './ContextDropdown.css';
 
 interface ContextDropdownProps {
@@ -20,6 +21,7 @@ interface ContextDropdownProps {
  * until at least one main agent has a measurable window.
  */
 export function ContextDropdown({ agents, open, onToggle, onSelect }: ContextDropdownProps) {
+  const { t } = useI18n();
   const wrapRef = useRef<HTMLDivElement>(null);
   const rows = rankContextAgents(agents);
   const hottest = rows[0];
@@ -64,8 +66,8 @@ export function ContextDropdown({ agents, open, onToggle, onSelect }: ContextDro
         onClick={onToggle}
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-label={`컨텍스트 윈도우: 최고는 ${hottest.name} ${Math.round(hottest.pct)}%, 라이브 에이전트 ${rows.length}명`}
-        title="가장 많이 사용 중인 메인 에이전트의 컨텍스트 윈도우 — 클릭하면 모든 라이브 에이전트를 비교합니다"
+        aria-label={t('contextDropdown.statAria', { name: hottest.name, pct: Math.round(hottest.pct), count: rows.length })}
+        title={t('contextDropdown.statTitle')}
       >
         <span className="ctx-stat-pct">{Math.round(hottest.pct)}%</span>
         <span className="ctx-stat-name">{hottest.name}</span>
@@ -73,10 +75,10 @@ export function ContextDropdown({ agents, open, onToggle, onSelect }: ContextDro
       </button>
 
       {open && (
-        <div className="ctx-dropdown" role="dialog" aria-label="라이브 에이전트의 컨텍스트 윈도우">
+        <div className="ctx-dropdown" role="dialog" aria-label={t('contextDropdown.dialogAria')}>
           <div className="ctx-dropdown-header">
-            <span>컨텍스트 윈도우</span>
-            <span className="ctx-dropdown-sub">라이브 에이전트 {rows.length}명</span>
+            <span>{t('contextDropdown.header')}</span>
+            <span className="ctx-dropdown-sub">{t('contextDropdown.liveAgents', { count: rows.length })}</span>
           </div>
           <ul className="ctx-list">
             {rows.map((r) => {
@@ -87,7 +89,7 @@ export function ContextDropdown({ agents, open, onToggle, onSelect }: ContextDro
                     type="button"
                     className={`ctx-item status-${r.status} ctx-${contextLevel(r.pct)}`}
                     onClick={() => { onSelect(r.id); onToggle(); }}
-                    title={`${r.name}: ${formatTokens(r.used)} / ${formatTokens(r.window)} 토큰 — 클릭하여 선택`}
+                    title={t('contextDropdown.rowTitle', { name: r.name, used: formatTokens(r.used), window: formatTokens(r.window) })}
                   >
                     <span className="ctx-item-top">
                       <span className="ctx-item-name" style={{ color: HERO_LABEL_COLOR[r.heroColor] }}>{r.name}</span>
@@ -95,14 +97,14 @@ export function ContextDropdown({ agents, open, onToggle, onSelect }: ContextDro
                       {badge !== null && (
                         <span className="ctx-item-model" style={{ color: badge.color, background: `${badge.color}26` }} title={r.model}>{badge.short}</span>
                       )}
-                      <span className={`ctx-item-status status-${r.status}`}>{STATUS_LABEL[r.status]}</span>
+                      <span className={`ctx-item-status status-${r.status}`}>{statusLabel(r.status)}</span>
                     </span>
                     <span className="ctx-item-meter">
                       <ContextMeter context={{ used: r.used, peak: r.used, window: r.window, windowSource: 'reported', compactions: r.compactions, updatedAt: 0 }} size="mini" />
                     </span>
                     <span className="ctx-item-detail">
                       {formatTokens(r.used)} / {formatTokens(r.window)}
-                      {r.compactions > 0 && <span className="ctx-item-compact" title="지금까지의 컴팩션"> · 컴팩션 {r.compactions}회</span>}
+                      {r.compactions > 0 && <span className="ctx-item-compact" title={t('contextDropdown.compactionsTitle')}>{' · '}{t('contextDropdown.compactions', { count: r.compactions })}</span>}
                     </span>
                   </button>
                 </li>

@@ -1,8 +1,10 @@
 import { editorBridge } from '../EditorBridge';
 import { editorStore, useEditorStore } from '../state/editor-store';
 import type { SlotInfo } from '../types/map';
+import { useI18n } from '../../i18n';
 
 export function EditorTopBar() {
+  const { t } = useI18n();
   const dirty = useEditorStore((s) => s.dirty);
   const lastSavedAt = useEditorStore((s) => s.lastSavedAt);
   const saveError = useEditorStore((s) => s.saveError);
@@ -17,11 +19,11 @@ export function EditorTopBar() {
   };
 
   const statusText = (() => {
-    if (saveError !== null) return `저장 오류: ${saveError}`;
-    if (saving) return '저장 중...';
-    if (dirty) return '저장되지 않은 변경 사항';
-    if (lastSavedAt !== null) return `${formatTime(lastSavedAt)} 저장됨`;
-    return '준비됨';
+    if (saveError !== null) return t('editor.topbar.saveError', { error: saveError });
+    if (saving) return t('editor.topbar.saving');
+    if (dirty) return t('editor.topbar.unsavedChanges');
+    if (lastSavedAt !== null) return t('editor.topbar.savedAt', { time: formatTime(lastSavedAt) });
+    return t('editor.topbar.ready');
   })();
 
   const statusClass = saveError !== null
@@ -38,13 +40,13 @@ export function EditorTopBar() {
   };
 
   const onClearMap = () => {
-    if (confirm('맵을 비우시겠습니까? 지형, 장식, 길, NPC가 모두 삭제됩니다. 유지하려면 저장을 눌러야 합니다.')) {
+    if (confirm(t('editor.topbar.confirmClearMap'))) {
       editorBridge.emit('ed:action', 'reset-all');
     }
   };
 
   const onLoadTemplate = () => {
-    if (confirm('기본 템플릿을 이 슬롯에 불러오시겠습니까? 저장되지 않은 변경 사항은 사라집니다. 유지하려면 저장을 눌러야 합니다.')) {
+    if (confirm(t('editor.topbar.confirmLoadTemplate'))) {
       editorBridge.emit('ed:action', 'load-template');
     }
   };
@@ -64,7 +66,7 @@ export function EditorTopBar() {
   return (
     <div className="editor-topbar">
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div className="editor-topbar-title">맵 에디터</div>
+        <div className="editor-topbar-title">{t('editor.topbar.title')}</div>
         <div className="editor-slot-tabs">
           {slotInfo.map((info) => {
             const isCurrentSlot = info.slot === currentSlot;
@@ -77,7 +79,7 @@ export function EditorTopBar() {
               <button
                 key={info.slot}
                 className={classes}
-                title={info.isEmpty ? `슬롯 ${info.slot} (비어 있음)` : `${info.name}${info.isActive ? ' (활성)' : ''}`}
+                title={info.isEmpty ? t('editor.topbar.slotEmpty', { slot: info.slot }) : info.isActive ? t('editor.topbar.slotActive', { name: info.name }) : info.name}
                 onClick={() => onSlotClick(info)}
               >
                 {getSlotLabel(info)}
@@ -88,23 +90,23 @@ export function EditorTopBar() {
       </div>
       <div className="editor-topbar-actions">
         <span className={statusClass}>{statusText}</span>
-        <button className="editor-btn primary" onClick={onSave} disabled={saving}>저장</button>
+        <button className="editor-btn primary" onClick={onSave} disabled={saving}>{t('common.save')}</button>
         <button
           className="editor-btn"
           onClick={onSetActive}
-          title="이 슬롯을 대시보드의 활성 맵으로 설정"
+          title={t('editor.topbar.setActiveTitle')}
         >
-          활성화 {currentSlot === activeSlot ? '\u2605' : ''}
+          {t('editor.topbar.setActive')} {currentSlot === activeSlot ? '\u2605' : ''}
         </button>
         <button
           className="editor-btn"
           onClick={onLoadTemplate}
-          title="기본 템플릿 맵을 이 슬롯에 불러오기 (현재 내용을 대체)"
+          title={t('editor.topbar.loadTemplateTitle')}
         >
-          템플릿 불러오기
+          {t('editor.topbar.loadTemplate')}
         </button>
-        <button className="editor-btn danger" onClick={onClearMap}>맵 비우기</button>
-        <a className="editor-btn" href="/" style={{ textDecoration: 'none' }}>마을로 돌아가기</a>
+        <button className="editor-btn danger" onClick={onClearMap}>{t('editor.topbar.clearMap')}</button>
+        <a className="editor-btn" href="/" style={{ textDecoration: 'none' }}>{t('editor.topbar.backToVillage')}</a>
       </div>
     </div>
   );

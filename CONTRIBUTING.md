@@ -1,5 +1,9 @@
 # Contributing to Agent Quest
 
+<p>
+  <strong>English</strong> · <a href="CONTRIBUTING.ko.md">한국어</a>
+</p>
+
 Thanks for your interest — issues and pull requests are very welcome.
 
 ## Ways to help

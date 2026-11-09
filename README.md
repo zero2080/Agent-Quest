@@ -9,6 +9,10 @@
 </p>
 
 <p align="center">
+  <strong>English</strong> · <a href="README.ko.md">한국어</a>
+</p>
+
+<p align="center">
   <a href="#features"><img src="https://img.shields.io/badge/Claude_Code-supported-D97757" alt="Claude Code supported" /></a>
   <a href="#features"><img src="https://img.shields.io/badge/Codex-supported-412991" alt="Codex supported" /></a>
 </p>

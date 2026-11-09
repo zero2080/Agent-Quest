@@ -3,10 +3,10 @@ import { editorStore, useEditorStore } from '../state/editor-store';
 import type { EraseScope, Layer, PathStyle } from '../types/editor-events';
 
 const LAYERS: Array<{ key: Layer; label: string }> = [
-  { key: 'terrain',     label: 'Terrain' },
-  { key: 'paths',       label: 'Paths' },
-  { key: 'decorations', label: 'Decorations' },
-  { key: 'buildings',   label: 'Buildings' },
+  { key: 'terrain',     label: '지형' },
+  { key: 'paths',       label: '길' },
+  { key: 'decorations', label: '장식' },
+  { key: 'buildings',   label: '건물' },
 ];
 
 const PATH_STYLES: PathStyle[] = ['main', 'secondary', 'trail', 'plaza'];
@@ -45,14 +45,14 @@ export function LayerPanel() {
   };
 
   const onClear = (what: 'clear-terrain' | 'clear-decorations' | 'clear-paths' | 'reset-buildings') => {
-    if (confirm(`Are you sure you want to run "${what}"?`)) {
+    if (confirm(`"${what}" 작업을 실행하시겠습니까?`)) {
       editorBridge.emit('ed:action', what);
     }
   };
 
   return (
     <div className="editor-layers">
-      <div className="editor-palette-header">Layers</div>
+      <div className="editor-palette-header">레이어</div>
       {LAYERS.map((l) => (
         <div key={l.key} className="editor-row">
           <label>
@@ -65,15 +65,15 @@ export function LayerPanel() {
         </div>
       ))}
 
-      <div className="editor-palette-header" style={{ marginTop: 6 }}>Path Brush</div>
+      <div className="editor-palette-header" style={{ marginTop: 6 }}>길 브러시</div>
       <div className="editor-row">
-        <label>Style</label>
+        <label>스타일</label>
         <select value={pathBrush.style} onChange={(e) => onPathStyle(e.target.value as PathStyle)}>
           {PATH_STYLES.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
       <div className="editor-row">
-        <label>Width {pathBrush.width}</label>
+        <label>너비 {pathBrush.width}</label>
         <input
           type="range"
           min={16}
@@ -84,17 +84,17 @@ export function LayerPanel() {
         />
       </div>
 
-      <div className="editor-palette-header" style={{ marginTop: 6 }}>Paint Brush</div>
+      <div className="editor-palette-header" style={{ marginTop: 6 }}>칠하기 브러시</div>
       <div className="editor-row">
         <label>
           <input type="checkbox" checked={paintTile.walkable} onChange={(e) => onWalkable(e.target.checked)} />
-          {' '}Walkable
+          {' '}통행 가능
         </label>
       </div>
 
       {tool === 'erase' && (
         <>
-          <div className="editor-palette-header" style={{ marginTop: 6 }}>Erase Scope</div>
+          <div className="editor-palette-header" style={{ marginTop: 6 }}>지우기 범위</div>
           <div className="editor-row">
             <select
               defaultValue="all"
@@ -107,11 +107,11 @@ export function LayerPanel() {
         </>
       )}
 
-      <div className="editor-palette-header" style={{ marginTop: 6 }}>Clear</div>
-      <button className="editor-btn" onClick={() => onClear('clear-terrain')}>Clear terrain</button>
-      <button className="editor-btn" onClick={() => onClear('clear-decorations')}>Clear decorations</button>
-      <button className="editor-btn" onClick={() => onClear('clear-paths')}>Clear paths</button>
-      <button className="editor-btn" onClick={() => onClear('reset-buildings')}>Reset buildings</button>
+      <div className="editor-palette-header" style={{ marginTop: 6 }}>비우기</div>
+      <button className="editor-btn" onClick={() => onClear('clear-terrain')}>지형 비우기</button>
+      <button className="editor-btn" onClick={() => onClear('clear-decorations')}>장식 비우기</button>
+      <button className="editor-btn" onClick={() => onClear('clear-paths')}>길 비우기</button>
+      <button className="editor-btn" onClick={() => onClear('reset-buildings')}>건물 초기화</button>
     </div>
   );
 }

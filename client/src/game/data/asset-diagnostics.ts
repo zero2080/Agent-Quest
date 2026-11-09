@@ -56,12 +56,12 @@ const CATEGORY_ORDER: AssetCategorySummary['id'][] = [
 ];
 
 const CATEGORY_LABEL: Record<AssetCategorySummary['id'], string> = {
-  hero: 'Hero sprites',
-  building: 'Buildings',
-  terrain: 'Terrain tiles',
-  decoration: 'Decorations (trees, rocks, bushes)',
-  ui: 'UI / logo',
-  other: 'Other',
+  hero: '영웅 스프라이트',
+  building: '건물',
+  terrain: '지형 타일',
+  decoration: '장식 (나무, 바위, 덤불)',
+  ui: 'UI / 로고',
+  other: '기타',
 };
 
 export function groupMissingByCategory(rawPaths: readonly string[]): GroupedMissingAssets {

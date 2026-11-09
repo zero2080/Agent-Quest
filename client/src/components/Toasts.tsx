@@ -27,14 +27,14 @@ const CATEGORY_ICON: Record<ToastPayload['category'], string> = {
 export function Toasts({ items, onActivate, onDismiss }: ToastsProps) {
   if (items.length === 0) return null;
   return (
-    <div className="toasts" role="region" aria-label="Notifications">
+    <div className="toasts" role="region" aria-label="알림">
       {items.map((t) => (
         <div key={t.key} className={`toast toast-${t.category}`} role="status">
           <button
             type="button"
             className="toast-body-btn"
             onClick={() => { onActivate(t.agentId); onDismiss(t.key); }}
-            title="Show this agent"
+            title="이 에이전트 보기"
           >
             <span className="toast-icon" aria-hidden="true">{CATEGORY_ICON[t.category]}</span>
             <span className="toast-text">
@@ -45,8 +45,8 @@ export function Toasts({ items, onActivate, onDismiss }: ToastsProps) {
           <button
             type="button"
             className="toast-close"
-            aria-label="Dismiss"
-            title="Dismiss"
+            aria-label="닫기"
+            title="닫기"
             onClick={() => onDismiss(t.key)}
           >×</button>
         </div>

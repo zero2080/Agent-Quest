@@ -27,12 +27,12 @@ const CATEGORY_ICON: Record<ToastPayload['category'], string> = {
 
 function relativeTime(ts: number): string {
   const s = Math.max(0, Math.floor((Date.now() - ts) / 1000));
-  if (s < 10) return 'just now';
-  if (s < 60) return `${s}s ago`;
+  if (s < 10) return '방금 전';
+  if (s < 60) return `${s}초 전`;
   const m = Math.floor(s / 60);
-  if (m < 60) return `${m}m ago`;
+  if (m < 60) return `${m}분 전`;
   const h = Math.floor(m / 60);
-  return `${h}h ago`;
+  return `${h}시간 전`;
 }
 
 /**
@@ -67,23 +67,23 @@ export function NotificationMenu({ entries, unread, open, onToggle, onActivate, 
         onClick={onToggle}
         aria-haspopup="true"
         aria-expanded={open}
-        aria-label={`Notifications${unread > 0 ? ` (${unread} unread)` : ''}`}
-        title="Notifications"
+        aria-label={`알림${unread > 0 ? ` (읽지 않음 ${unread}개)` : ''}`}
+        title="알림"
       >
         {'\u{1F514}'}
         {unread > 0 && <span className="notif-badge">{unread > 9 ? '9+' : unread}</span>}
       </button>
 
       {open && (
-        <div className="notif-dropdown" role="dialog" aria-label="Recent notifications">
+        <div className="notif-dropdown" role="dialog" aria-label="최근 알림">
           <div className="notif-dropdown-header">
-            <span>Notifications</span>
+            <span>알림</span>
             {entries.length > 0 && (
-              <button type="button" className="notif-clear" onClick={onClear}>Clear</button>
+              <button type="button" className="notif-clear" onClick={onClear}>지우기</button>
             )}
           </div>
           {entries.length === 0 ? (
-            <div className="notif-empty">No notifications yet.</div>
+            <div className="notif-empty">아직 알림이 없습니다.</div>
           ) : (
             <ul className="notif-list">
               {entries.map((e) => (

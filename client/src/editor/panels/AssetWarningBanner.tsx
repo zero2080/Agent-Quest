@@ -21,13 +21,13 @@ export function AssetWarningBanner() {
       <div className="editor-asset-banner-head">
         <span className="editor-asset-banner-icon" aria-hidden>⚠</span>
         <span className="editor-asset-banner-title">
-          {errors.total} asset{errors.total === 1 ? '' : 's'} failed to load
+          에셋 {errors.total}개를 불러오지 못했습니다
         </span>
         <button
           className="editor-asset-banner-dismiss"
           type="button"
           onClick={() => editorStore.dismissAssetErrors()}
-          aria-label="Dismiss"
+          aria-label="닫기"
         >
           ×
         </button>
@@ -41,15 +41,15 @@ export function AssetWarningBanner() {
           ))}
         </ul>
         <details className="editor-asset-banner-details">
-          <summary>Show missing files</summary>
+          <summary>누락된 파일 보기</summary>
           <ul>
             {samples.map((p) => (
               <li key={p}><code>{p}</code></li>
             ))}
-            {overflow > 0 && <li>…and {overflow} more</li>}
+            {overflow > 0 && <li>…외 {overflow}개</li>}
           </ul>
           <p className="editor-asset-banner-hint">
-            Restore with <code>git checkout -- client/public/assets/themes/tiny-swords-cc0/</code>
+            <code>git checkout -- client/public/assets/themes/tiny-swords-cc0/</code> 명령으로 복원할 수 있습니다
           </p>
         </details>
       </div>

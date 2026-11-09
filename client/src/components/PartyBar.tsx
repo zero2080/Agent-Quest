@@ -57,7 +57,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
     isChild ? 'partybar-agent--child' : '',
   ].filter(Boolean).join(' ');
 
-  const role = isSubagentAgent(agent) ? (agent.subagentType ?? 'subagent') : undefined;
+  const role = isSubagentAgent(agent) ? (agent.subagentType ?? '서브에이전트') : undefined;
   const title = mode === 'icons'
     ? `${agent.name}${role !== undefined ? ` (${role})` : ''} · ${displayActivity(agent)}`
     : undefined;
@@ -67,7 +67,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
       type="button"
       className={classes}
       onClick={onClick}
-      aria-label={`Select ${agent.name}${showSourceBadge ? ` (${agent.source})` : ''}${role !== undefined ? `, ${role} subagent` : ''}, ${displayActivity(agent)}`}
+      aria-label={`${agent.name} 선택${showSourceBadge ? ` (${agent.source})` : ''}${role !== undefined ? `, ${role} 서브에이전트` : ''}, ${displayActivity(agent)}`}
       aria-current={isSelected ? 'true' : undefined}
       title={title}
     >
@@ -85,7 +85,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
               style={isSelected ? undefined : { color: HERO_LABEL_COLOR[agent.heroColor] }}
             >{agent.name}</span>
             {childCount > 0 && (
-              <span className="partybar-child-badge" title={`${childCount} live subagent${childCount === 1 ? '' : 's'}`}>
+              <span className="partybar-child-badge" title={`라이브 서브에이전트 ${childCount}개`}>
                 {'⚑'} {childCount}
               </span>
             )}
@@ -95,7 +95,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
             <span
               className="partybar-role"
               style={parentColor !== undefined ? { color: HERO_LABEL_COLOR[parentColor] } : undefined}
-              title={agent.subagentType ?? 'subagent'}
+              title={agent.subagentType ?? '서브에이전트'}
             >
               {'⚔'} {role}
             </span>
@@ -115,7 +115,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
                   borderColor: `${SOURCE_BADGE_COLOR[agent.source]}80`,
                   background: `${SOURCE_BADGE_COLOR[agent.source]}14`,
                 }}
-                aria-label={`source ${sourceBadgeLabel(agent)} · ${agent.source}`}
+                aria-label={`소스 ${sourceBadgeLabel(agent)} · ${agent.source}`}
               >
                 {sourceBadgeLabel(agent)}
               </span>
@@ -131,7 +131,7 @@ function PartyRow({ agent, mode, isSelected, onClick, showSourceBadge, childCoun
                     borderColor: `${badge.color}80`,
                     background: `${badge.color}14`,
                   }}
-                  aria-label={`model ${agent.model ?? ''}`}
+                  aria-label={`모델 ${agent.model ?? ''}`}
                   title={agent.model}
                 >
                   {badge.short}
@@ -169,9 +169,9 @@ export function PartyBar({ agents, selectedAgentId, onSelectAgent, showSourceBad
     .filter((a) => a.status === 'completed')
     .sort((a, b) => b.lastEvent - a.lastEvent);
 
-  const headerParts = [`${activeCount} active`];
-  if (waitingCount > 0) headerParts.push(`${waitingCount} waiting`);
-  headerParts.push(`${idleCount} idle`);
+  const headerParts = [`활동 중 ${activeCount}`];
+  if (waitingCount > 0) headerParts.push(`대기 중 ${waitingCount}`);
+  headerParts.push(`유휴 ${idleCount}`);
 
   const toggleFold = useCallback(() => {
     updatePrefs({ foldState: mode === 'full' ? 'icons' : 'full' });
@@ -182,17 +182,17 @@ export function PartyBar({ agents, selectedAgentId, onSelectAgent, showSourceBad
   }, [onSelectAgent]);
 
   return (
-    <div className={`partybar mode-${mode}`} role="list" aria-label="Party">
+    <div className={`partybar mode-${mode}`} role="list" aria-label="파티">
       <div className="partybar-header">
         {mode === 'full' ? (
-          <span className="partybar-title">Party ({headerParts.join(', ')})</span>
+          <span className="partybar-title">파티 ({headerParts.join(', ')})</span>
         ) : (
           <span className="partybar-title-compact">{live.length}</span>
         )}
         <button
           type="button"
           className="partybar-fold-btn"
-          aria-label={mode === 'full' ? 'Collapse to icons' : 'Expand party'}
+          aria-label={mode === 'full' ? '아이콘으로 접기' : '파티 펼치기'}
           aria-pressed={mode === 'icons'}
           onClick={toggleFold}
         >{mode === 'full' ? '◀' : '▶'}</button>
@@ -232,11 +232,11 @@ export function PartyBar({ agents, selectedAgentId, onSelectAgent, showSourceBad
             className="partybar-completed-header"
             aria-expanded={showCompleted}
             onClick={() => setShowCompleted((v) => !v)}
-            title={`${completed.length} completed session${completed.length === 1 ? '' : 's'}`}
+            title={`완료된 세션 ${completed.length}개`}
           >
             <span className="partybar-completed-caret" aria-hidden="true">{showCompleted ? '▾' : '▸'}</span>
             {mode === 'full'
-              ? <span>Completed ({completed.length})</span>
+              ? <span>완료 ({completed.length})</span>
               : <span className="partybar-completed-count">{completed.length}✓</span>}
           </button>
           {showCompleted && (

@@ -78,8 +78,8 @@ export function TopBar({ agents, connected, notifications }: TopBarProps) {
           type="button"
           className="topbar-logo-button"
           onClick={() => eventBridge.emit('tutorial:open')}
-          title="Show tutorial"
-          aria-label="Show tutorial"
+          title="튜토리얼 보기"
+          aria-label="튜토리얼 보기"
         >
           <img src="assets/logo.png" alt="Agent Quest" className="topbar-logo" />
         </button>
@@ -87,49 +87,49 @@ export function TopBar({ agents, connected, notifications }: TopBarProps) {
         <span
           className={`topbar-status-dot ${connected ? 'online' : 'offline'}`}
           role="status"
-          aria-label={connected ? 'Online' : 'Offline'}
-          title={connected ? 'Online' : 'Offline'}
+          aria-label={connected ? '온라인' : '오프라인'}
+          title={connected ? '온라인' : '오프라인'}
         />
 
         <div
           id="topbar-tools"
           className="topbar-tools"
           role="region"
-          aria-label="Topbar menu"
+          aria-label="상단 바 메뉴"
         >
           <div className="topbar-stats">
             <div className="topbar-stat">
-              <span className="topbar-stat-label">Status:</span>
+              <span className="topbar-stat-label">상태:</span>
               <span className={`topbar-stat-value ${connected ? 'active' : 'error'}`}>
-                {connected ? 'Online' : 'Offline'}
+                {connected ? '온라인' : '오프라인'}
               </span>
             </div>
             <div className="topbar-stat">
-              <span className="topbar-stat-label">Active:</span>
+              <span className="topbar-stat-label">활동:</span>
               <span className="topbar-stat-value active">{active}</span>
             </div>
             {waiting > 0 && (
               <div className="topbar-stat">
-                <span className="topbar-stat-label">Waiting:</span>
+                <span className="topbar-stat-label">대기:</span>
                 <span className="topbar-stat-value waiting">{waiting}</span>
               </div>
             )}
             <div className="topbar-stat">
-              <span className="topbar-stat-label">Idle:</span>
+              <span className="topbar-stat-label">유휴:</span>
               <span className="topbar-stat-value idle">{idle}</span>
             </div>
             <div className="topbar-stat">
-              <span className="topbar-stat-label">Done:</span>
+              <span className="topbar-stat-label">완료:</span>
               <span className="topbar-stat-value">{completed}</span>
             </div>
             {errors > 0 && (
               <div className="topbar-stat">
-                <span className="topbar-stat-label">Errors:</span>
+                <span className="topbar-stat-label">오류:</span>
                 <span className="topbar-stat-value error">{errors}</span>
               </div>
             )}
             <div className="topbar-stat">
-              <span className="topbar-stat-label">Total:</span>
+              <span className="topbar-stat-label">전체:</span>
               <span className="topbar-stat-value">{agents.length}</span>
             </div>
             <ContextDropdown
@@ -152,14 +152,14 @@ export function TopBar({ agents, connected, notifications }: TopBarProps) {
             <button
               className={`topbar-effect-btn ${nightOn ? 'active' : ''}`}
               onClick={toggleNight}
-              title={nightOn ? 'Day mode' : 'Night mode'}
+              title={nightOn ? '주간 모드' : '야간 모드'}
             >
               {nightOn ? '\u{1F319}' : '\u{2600}\u{FE0F}'}
             </button>
             <button
               className={`topbar-effect-btn ${rainOn ? 'active' : ''}`}
               onClick={toggleRain}
-              title={rainOn ? 'Stop rain' : 'Start rain'}
+              title={rainOn ? '비 그치기' : '비 내리기'}
             >
               {'\u{1F327}\u{FE0F}'}
             </button>
@@ -169,7 +169,7 @@ export function TopBar({ agents, connected, notifications }: TopBarProps) {
               href="/?mode=editor"
               target="_blank"
               rel="noopener"
-              title="Open Map Editor"
+              title="맵 에디터 열기"
               style={{ textDecoration: 'none' }}
             >
               {'\u{1F5FA}\u{FE0F}'}
@@ -177,23 +177,23 @@ export function TopBar({ agents, connected, notifications }: TopBarProps) {
             <button
               className="topbar-effect-btn topbar-skills-btn"
               onClick={() => eventBridge.emit('skills:open')}
-              title="Skills & Plugins — fleet view and AI-review export"
-              aria-label="Skills and plugins"
+              title="스킬 & 플러그인 — 전체 보기 및 AI 리뷰용 내보내기"
+              aria-label="스킬 및 플러그인"
             >
               {'\u2726'}
             </button>
             <button
               className="topbar-effect-btn"
               onClick={() => eventBridge.emit('settings:open')}
-              title="Settings"
-              aria-label="Settings"
+              title="설정"
+              aria-label="설정"
             >
               {'\u{2699}\u{FE0F}'}
             </button>
             <button
               className="topbar-effect-btn"
               onClick={() => eventBridge.emit('tutorial:open')}
-              title="Show tutorial"
+              title="튜토리얼 보기"
             >
               {'\u{2753}'}
             </button>
@@ -206,7 +206,7 @@ export function TopBar({ agents, connected, notifications }: TopBarProps) {
           className="topbar-menu-toggle"
           aria-expanded={menuOpen}
           aria-controls="topbar-tools"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={menuOpen ? '메뉴 닫기' : '메뉴 열기'}
           onClick={() => setMenuOpen((v) => !v)}
         >
           <span className="topbar-menu-toggle-bar" />

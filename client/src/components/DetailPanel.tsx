@@ -2,7 +2,7 @@ import { isXcodeAgent, sourceBadgeLabel } from '../types/sessionIdentity';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import {
-  HERO_LABEL_COLOR, SOURCE_BADGE_COLOR, modelBadge, displayActivity, formatTokens, isSubagentAgent, skillShortName,
+  HERO_CLASS_LABEL, HERO_LABEL_COLOR, SOURCE_BADGE_COLOR, modelBadge, displayActivity, formatTokens, isSubagentAgent, skillShortName,
   type AgentSource, type AgentState, type ContextUsage, type SkillInventory,
 } from '../types/agent';
 import { HeroAvatar } from './HeroAvatar';
@@ -30,16 +30,16 @@ function formatDuration(startMs: number): string {
   const elapsed = Math.floor((Date.now() - startMs) / 1000);
   const mins = Math.floor(elapsed / 60);
   const secs = elapsed % 60;
-  return `${mins}m ${secs}s`;
+  return `${mins}분 ${secs}초`;
 }
 
 /** One line explaining where the context window figure comes from. */
 function windowSourceNote(c: ContextUsage, source: AgentSource): string {
   switch (c.windowSource) {
-    case 'reported': return `Window reported by ${source === 'codex' ? 'Codex' : 'the CLI'}.`;
-    case 'configured': return 'Window from your settings ([1m] model) or AGENT_QUEST_CLAUDE_CONTEXT_WINDOW.';
-    case 'inferred': return 'Window inferred from usage: more than 200k tokens in use means the 1M window.';
-    case 'default': return 'Default 200k window assumed — set AGENT_QUEST_CLAUDE_CONTEXT_WINDOW if yours differs.';
+    case 'reported': return `${source === 'codex' ? 'Codex' : 'CLI'}가 보고한 윈도우입니다.`;
+    case 'configured': return '설정([1m] 모델) 또는 AGENT_QUEST_CLAUDE_CONTEXT_WINDOW에서 가져온 윈도우입니다.';
+    case 'inferred': return '사용량으로 추정한 윈도우입니다: 200k 토큰 초과 사용 시 1M 윈도우로 간주합니다.';
+    case 'default': return '기본 200k 윈도우로 가정합니다 — 다르다면 AGENT_QUEST_CLAUDE_CONTEXT_WINDOW를 설정하세요.';
   }
 }
 
@@ -127,7 +127,7 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
         <div className="detail-topbar-body">
           <div className="detail-name-row">
             <span className="detail-name" style={{ color: HERO_LABEL_COLOR[agent.heroColor] }}>{agent.name}</span>
-            {isSubagentAgent(agent) && <span className="detail-sub-badge" title={agent.subagentType ?? 'subagent'}>SUBAGENT</span>}
+            {isSubagentAgent(agent) && <span className="detail-sub-badge" title={agent.subagentType ?? '서브에이전트'}>SUBAGENT</span>}
             {(showSourceBadge || isXcodeAgent(agent)) && (
               <span
                 className="detail-source-badge"
@@ -136,7 +136,7 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
                   borderColor: `${SOURCE_BADGE_COLOR[agent.source]}80`,
                   background: `${SOURCE_BADGE_COLOR[agent.source]}14`,
                 }}
-                aria-label={`source ${sourceBadgeLabel(agent)} · ${agent.source}`}
+                aria-label={`소스 ${sourceBadgeLabel(agent)} · ${agent.source}`}
               >
                 {sourceBadgeLabel(agent)}
               </span>
@@ -144,11 +144,11 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
           </div>
           <div className="detail-class">
             {isSubagentAgent(agent)
-              ? <>{'⚔'} {agent.subagentType ?? 'subagent'} <span className="detail-class-muted">· {agent.heroClass}</span></>
-              : agent.heroClass}
+              ? <>{'⚔'} {agent.subagentType ?? '서브에이전트'} <span className="detail-class-muted">· {HERO_CLASS_LABEL[agent.heroClass]}</span></>
+              : HERO_CLASS_LABEL[agent.heroClass]}
           </div>
         </div>
-        <button className="detail-close" onClick={onClose} aria-label="Close panel">✕</button>
+        <button className="detail-close" onClick={onClose} aria-label="패널 닫기">✕</button>
       </div>
 
       <div className="detail-tabs" role="tablist">
@@ -158,20 +158,20 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
           aria-selected={tab === 'live'}
           className={`detail-tab ${tab === 'live' ? 'active' : ''}`}
           onClick={() => setTab('live')}
-        >Live</button>
+        >실시간</button>
         <button
           type="button"
           role="tab"
           aria-selected={tab === 'report'}
           className={`detail-tab ${tab === 'report' ? 'active' : ''}`}
           onClick={() => setTab('report')}
-        >Report</button>
-        <span className="detail-export" aria-label="Export this session for AI review">
-          <button type="button" className="detail-export-btn" onClick={() => { void onCopyExport(); }} title="Copy a Markdown report of this session to paste into another AI">
-            {copied ? 'Copied ✓' : 'Copy MD'}
+        >리포트</button>
+        <span className="detail-export" aria-label="이 세션을 AI 리뷰용으로 내보내기">
+          <button type="button" className="detail-export-btn" onClick={() => { void onCopyExport(); }} title="이 세션의 Markdown 리포트를 복사해 다른 AI에 붙여넣기">
+            {copied ? '복사됨 ✓' : 'MD 복사'}
           </button>
-          <button type="button" className="detail-export-btn" onClick={onDownloadMd} title="Download the Markdown report">.md</button>
-          <button type="button" className="detail-export-btn" onClick={onDownloadJson} title="Download the raw data as JSON">.json</button>
+          <button type="button" className="detail-export-btn" onClick={onDownloadMd} title="Markdown 리포트 다운로드">.md</button>
+          <button type="button" className="detail-export-btn" onClick={onDownloadJson} title="원본 데이터를 JSON으로 다운로드">.json</button>
         </span>
       </div>
 
@@ -180,21 +180,21 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
       ) : (
       <div className="detail-body">
         <div className="detail-section">
-          <div className="detail-section-title">Status</div>
+          <div className="detail-section-title">상태</div>
           <div className="detail-row">
-            <span className="detail-label">State</span>
+            <span className="detail-label">현재 상태</span>
             <span className={`detail-value detail-state status-${agent.status}`}>{displayActivity(agent)}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Session</span>
+            <span className="detail-label">세션</span>
             <span className="detail-value detail-value--num">{formatDuration(agent.sessionStart)}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Tool Calls</span>
+            <span className="detail-label">도구 호출</span>
             <span className="detail-value detail-value--num">{agent.toolCalls.length}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Profile</span>
+            <span className="detail-label">프로필</span>
             <span className="detail-value">{configDirLabel(agent.configDir)}</span>
           </div>
           {(() => {
@@ -202,7 +202,7 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
             if (badge === null) return null;
             return (
               <div className="detail-row">
-                <span className="detail-label">Model</span>
+                <span className="detail-label">모델</span>
                 <span className="detail-value detail-model-value">
                   <span
                     className="detail-model-badge"
@@ -223,21 +223,21 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
 
         {agent.context !== undefined && (
           <div className="detail-section">
-            <div className="detail-section-title">Context</div>
+            <div className="detail-section-title">컨텍스트</div>
             <ContextMeter context={agent.context} />
             <div className="detail-row detail-row--spaced">
-              <span className="detail-label">In use</span>
+              <span className="detail-label">사용 중</span>
               <span className="detail-value detail-value--num">
                 {formatTokens(agent.context.used)}
                 {agent.context.window !== null && <span className="detail-value-suffix">/ {formatTokens(agent.context.window)}</span>}
               </span>
             </div>
             <div className="detail-row">
-              <span className="detail-label">Peak</span>
+              <span className="detail-label">최고치</span>
               <span className="detail-value detail-value--num">{formatTokens(agent.context.peak)}</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label">Compactions</span>
+              <span className="detail-label">컴팩션</span>
               <span className={`detail-value detail-value--num ${agent.context.compactions > 0 ? 'detail-value--warn' : ''}`}>{agent.context.compactions}</span>
             </div>
             <div className="detail-note">{windowSourceNote(agent.context, agent.source)}</div>
@@ -246,10 +246,10 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
 
         {(agent.activeSkill !== undefined || skills.length > 0 || plugins.length > 0 || inventory !== undefined) && (
           <div className="detail-section">
-            <div className="detail-section-title">Skills &amp; Plugins</div>
+            <div className="detail-section-title">스킬 &amp; 플러그인</div>
             {agent.activeSkill !== undefined && (
               <div className="detail-row">
-                <span className="detail-label">Active skill</span>
+                <span className="detail-label">활성 스킬</span>
                 <span className="detail-skill-pill" title={agent.activeSkill}>{'✦'} {skillShortName(agent.activeSkill)}</span>
               </div>
             )}
@@ -262,7 +262,7 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
                       {s.plugin !== undefined && <span className="detail-usage-tag">{s.plugin}</span>}
                     </span>
                     <span className="detail-usage-stat">
-                      {s.loads}× · ~{formatTokens(s.loadTokens)} tok
+                      {s.loads}× · ~{formatTokens(s.loadTokens)} 토큰
                     </span>
                   </li>
                 ))}
@@ -277,19 +277,19 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
                       <span className="detail-usage-tag">{p.kind}</span>
                     </span>
                     <span className="detail-usage-stat">
-                      {p.calls} call{p.calls === 1 ? '' : 's'} · ~{formatTokens(p.resultTokens)} tok
+                      {p.calls}회 호출 · ~{formatTokens(p.resultTokens)} 토큰
                     </span>
                   </li>
                 ))}
               </ul>
             )}
             {skills.length === 0 && plugins.length === 0 && agent.activeSkill === undefined && (
-              <div className="detail-note">No skills or plugins used yet.</div>
+              <div className="detail-note">아직 사용한 스킬이나 플러그인이 없습니다.</div>
             )}
             {inventory !== undefined && inventory.count > 0 && (
               <div className="detail-note">
-                {inventory.count} skills installed (~{formatTokens(inventory.tokens)} tokens if always loaded) ·
-                loaded here: {skills.length} (~{formatTokens(loadedTokens)}).
+                설치된 스킬 {inventory.count}개 (항상 로드 시 ~{formatTokens(inventory.tokens)} 토큰) ·
+                여기서 로드됨: {skills.length}개 (~{formatTokens(loadedTokens)}).
               </div>
             )}
           </div>
@@ -301,22 +301,22 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
           const returned = children.reduce((sum, c) => sum + (c.returnedTokens ?? 0), 0);
           return (
             <div className="detail-section">
-              <div className="detail-section-title">Delegation</div>
+              <div className="detail-section-title">위임</div>
               <div className="detail-row">
-                <span className="detail-label">Subagents</span>
-                <span className="detail-value detail-value--num">{live} live <span className="detail-value-suffix">/ {children.length}</span></span>
+                <span className="detail-label">서브에이전트</span>
+                <span className="detail-value detail-value--num">{live} 진행 중 <span className="detail-value-suffix">/ {children.length}</span></span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Processed by them</span>
-                <span className="detail-value detail-value--num">~{formatTokens(processed)} tok</span>
+                <span className="detail-label">서브에이전트 처리량</span>
+                <span className="detail-value detail-value--num">~{formatTokens(processed)} 토큰</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Returned here</span>
-                <span className="detail-value detail-value--num">~{formatTokens(returned)} tok</span>
+                <span className="detail-label">여기로 반환</span>
+                <span className="detail-value detail-value--num">~{formatTokens(returned)} 토큰</span>
               </div>
               <div className="detail-row">
-                <span className="detail-label">Kept out of this context</span>
-                <span className="detail-value detail-value--num detail-value--good">~{formatTokens(Math.max(0, processed - returned))} tok</span>
+                <span className="detail-label">이 컨텍스트에서 절약</span>
+                <span className="detail-value detail-value--num detail-value--good">~{formatTokens(Math.max(0, processed - returned))} 토큰</span>
               </div>
               <ul className="detail-usage-list">
                 {children.map((c) => (
@@ -334,10 +334,10 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
 
         {isSubagentAgent(agent) && (parent !== undefined || agent.returnedTokens !== undefined) && (
           <div className="detail-section">
-            <div className="detail-section-title">Parent</div>
+            <div className="detail-section-title">부모</div>
             {parent !== undefined && (
               <div className="detail-row">
-                <span className="detail-label">Spawned by</span>
+                <span className="detail-label">생성한 에이전트</span>
                 <button type="button" className="detail-link-btn" onClick={() => onSelectAgent(parent.id)} style={{ color: HERO_LABEL_COLOR[parent.heroColor] }}>
                   {parent.name}
                 </button>
@@ -345,14 +345,14 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
             )}
             {agent.context !== undefined && (
               <div className="detail-row">
-                <span className="detail-label">Own context peak</span>
-                <span className="detail-value detail-value--num">~{formatTokens(agent.context.peak)} tok</span>
+                <span className="detail-label">자체 컨텍스트 최고치</span>
+                <span className="detail-value detail-value--num">~{formatTokens(agent.context.peak)} 토큰</span>
               </div>
             )}
             {agent.returnedTokens !== undefined && (
               <div className="detail-row">
-                <span className="detail-label">Returned to parent</span>
-                <span className="detail-value detail-value--num">~{formatTokens(agent.returnedTokens)} tok</span>
+                <span className="detail-label">부모에 반환</span>
+                <span className="detail-value detail-value--num">~{formatTokens(agent.returnedTokens)} 토큰</span>
               </div>
             )}
           </div>
@@ -360,26 +360,26 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
 
         {currentFile !== undefined && (
           <div className="detail-section">
-            <div className="detail-section-title">Current File</div>
+            <div className="detail-section-title">현재 파일</div>
             <PathValue path={currentFile} cwd={agent.cwd} className="detail-value detail-value--path" />
           </div>
         )}
 
         {currentCommand !== undefined && (
           <div className="detail-section">
-            <div className="detail-section-title">Current Command</div>
+            <div className="detail-section-title">현재 명령</div>
             <div className="detail-value detail-value--path">{currentCommand}</div>
           </div>
         )}
 
         <div className="detail-section">
-          <div className="detail-section-title">Project</div>
+          <div className="detail-section-title">프로젝트</div>
           <PathValue path={agent.cwd} cwd={agent.cwd} className="detail-value detail-value--path" />
         </div>
 
         {lastMessage !== undefined && (
           <div className="detail-section">
-            <div className="detail-section-title">Last Message</div>
+            <div className="detail-section-title">마지막 메시지</div>
             <div ref={lastMessageRef} className="detail-last-message collapsed">
               <ReactMarkdown>{lastMessage}</ReactMarkdown>
             </div>
@@ -389,7 +389,7 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
                 className="detail-last-message-toggle"
                 onClick={() => setModalOpen(true)}
               >
-                Show full message
+                전체 메시지 보기
               </button>
             )}
           </div>
@@ -397,7 +397,7 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
 
         {agent.filesModified.length > 0 && (
           <div className="detail-section">
-            <div className="detail-section-title">Files Modified ({agent.filesModified.length})</div>
+            <div className="detail-section-title">수정된 파일 ({agent.filesModified.length})</div>
             <ul className="detail-file-list">
               {agent.filesModified.slice(-10).map((f) => (
                 <li key={f} title={f}>
@@ -410,7 +410,7 @@ export function DetailPanel({ agent, agents, skillInventory, onClose, onSelectAg
 
         {agent.errors.length > 0 && (
           <div className="detail-section detail-section--errors">
-            <div className="detail-section-title">Errors ({agent.errors.length})</div>
+            <div className="detail-section-title">오류 ({agent.errors.length})</div>
             {agent.errors.slice(-3).map((e, i) => (
               <div key={i} className="detail-value detail-value--error">{e}</div>
             ))}
@@ -449,11 +449,11 @@ function LastMessageModal({ agentName, message, onClose }: LastMessageModalProps
         className="lastmsg-modal"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
-        aria-label={`Last message from ${agentName}`}
+        aria-label={`${agentName}의 마지막 메시지`}
       >
-        <button className="lastmsg-close" onClick={onClose} title="Close (Esc)" aria-label="Close">×</button>
+        <button className="lastmsg-close" onClick={onClose} title="닫기 (Esc)" aria-label="닫기">×</button>
         <div className="lastmsg-header">
-          <span className="lastmsg-header-label">Last message from</span>
+          <span className="lastmsg-header-label">마지막 메시지:</span>
           <span className="lastmsg-header-name">{agentName}</span>
         </div>
         <div className="lastmsg-body">

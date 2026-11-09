@@ -101,7 +101,7 @@ export function SettingsPanel({ settings, onChange, onClose }: SettingsPanelProp
   const sendTestNotification = useCallback(() => {
     try {
       if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-        new Notification('Agent Quest', { body: 'Notifications are working \u{1F514}', tag: 'agentquest:test' });
+        new Notification('Agent Quest', { body: '알림이 정상 작동합니다 \u{1F514}', tag: 'agentquest:test' });
       }
     } catch { /* ignore */ }
     if (settings.soundEnabled) playChime('waiting', settings.volume);
@@ -162,71 +162,71 @@ export function SettingsPanel({ settings, onChange, onClose }: SettingsPanelProp
 
   return (
     <div className="settings-backdrop" onClick={onClose}>
-      <div className="settings-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Settings">
-        <button className="settings-close" onClick={onClose} title="Close (Esc)">×</button>
+      <div className="settings-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="설정">
+        <button className="settings-close" onClick={onClose} title="닫기 (Esc)">×</button>
 
-        <h2 className="settings-title">Settings</h2>
+        <h2 className="settings-title">설정</h2>
 
-        <div className="settings-section-label">Notifications</div>
+        <div className="settings-section-label">알림</div>
         <Toggle
-          label="Desktop notifications"
-          hint="Alert me when an agent needs me or finishes"
+          label="데스크톱 알림"
+          hint="에이전트가 저를 필요로 하거나 작업을 마치면 알려줍니다"
           checked={notifyOn}
           onToggle={handleNotificationsToggle}
         />
         {permissionBlocked && (
           <p className="settings-warn">
-            Notifications are blocked by your browser. Enable them for this site in the
-            browser's site settings, then toggle this back on.
+            브라우저에서 알림이 차단되어 있습니다. 브라우저의 사이트 설정에서 이 사이트의
+            알림을 허용한 뒤 이 스위치를 다시 켜 주세요.
           </p>
         )}
         {notifyOn && permission === 'unsupported' && (
           <p className="settings-warn">
-            This browser doesn't support desktop notifications — sounds will still work.
+            이 브라우저는 데스크톱 알림을 지원하지 않습니다 — 소리는 계속 작동합니다.
           </p>
         )}
         {notifyOn && permission === 'granted' && (
           <div className="settings-row">
-            <span className="settings-muted">Allowed by your browser.</span>
-            <button className="settings-btn" onClick={sendTestNotification}>Send a test</button>
+            <span className="settings-muted">브라우저에서 허용되었습니다.</span>
+            <button className="settings-btn" onClick={sendTestNotification}>테스트 보내기</button>
           </div>
         )}
         <Toggle
-          label="In-app toasts"
-          hint="Dismissable banners inside the dashboard — works everywhere, no permission"
+          label="앱 내 토스트"
+          hint="대시보드 안에 표시되는 닫을 수 있는 배너 — 어디서나 작동하며 권한이 필요 없습니다"
           checked={settings.inAppToasts}
           onToggle={(v) => onChange({ inAppToasts: v })}
         />
 
         <div className="settings-hint-block settings-hook-blurb">
-          <strong>Reliable turn-end</strong> — let Claude tell Agent Quest the instant an
-          agent finishes, instead of inferring it from logs (fewer false alarms, no delay).
-          Optional, Claude-only. Enabling writes a small <code>Stop</code> hook into your
-          Claude <code>settings.json</code>; existing hooks are left untouched.
+          <strong>정확한 턴 종료 감지</strong> — 로그에서 추론하는 대신 에이전트가 작업을
+          마치는 즉시 Claude가 Agent Quest에 알리도록 합니다(오탐 감소, 지연 없음).
+          선택 사항이며 Claude 전용입니다. 켜면 Claude <code>settings.json</code>에 작은
+          <code>Stop</code> 훅을 추가하며, 기존 훅은 그대로 유지됩니다.
         </div>
         {hook.loading ? (
-          <p className="settings-muted">Checking…</p>
+          <p className="settings-muted">확인 중…</p>
         ) : hook.status === null ? (
-          <p className="settings-warn">Couldn't reach the server{hook.error !== null ? `: ${hook.error}` : ''}.</p>
+          <p className="settings-warn">서버에 연결할 수 없습니다{hook.error !== null ? `: ${hook.error}` : ''}.</p>
         ) : hook.status.configDirs.length === 0 ? (
-          <p className="settings-muted">No Claude Code install detected.</p>
+          <p className="settings-muted">Claude Code 설치가 감지되지 않았습니다.</p>
         ) : (
           <>
             <div className="settings-hook">
               <span className={`settings-hook-state ${hook.status.installed ? 'on' : ''}`}>
-                {hook.status.installed ? 'Reliable turn-end: on' : hook.status.anyInstalled ? 'Partially enabled' : 'Reliable turn-end: off'}
+                {hook.status.installed ? '정확한 턴 종료 감지: 켜짐' : hook.status.anyInstalled ? '일부만 켜짐' : '정확한 턴 종료 감지: 꺼짐'}
               </span>
               <button
                 className="settings-btn"
                 disabled={hook.busy}
                 onClick={() => { void setHookEnabled(!hook.status!.installed); }}
               >
-                {hook.busy ? '…' : hook.status.installed ? 'Disable' : 'Enable'}
+                {hook.busy ? '…' : hook.status.installed ? '끄기' : '켜기'}
               </button>
             </div>
             {hook.status.anyInstalled && (
               <p className="settings-muted">
-                Restart your Claude Code sessions (or start new ones) for the change to take effect.
+                변경 사항을 적용하려면 Claude Code 세션을 재시작하거나 새 세션을 시작해 주세요.
               </p>
             )}
             {hook.error !== null && <p className="settings-warn">{hook.error}</p>}
@@ -235,52 +235,52 @@ export function SettingsPanel({ settings, onChange, onClose }: SettingsPanelProp
 
         <div className="settings-subgroup" data-dim={!anyChannel}>
           <Toggle
-            label="Turn finished"
-            hint="Agent finished its turn and is waiting for you"
+            label="턴 완료"
+            hint="에이전트가 차례를 마치고 기다리고 있습니다"
             checked={settings.notifyWaiting}
             disabled={!anyChannel}
             onToggle={(v) => onChange({ notifyWaiting: v })}
           />
           <Toggle
-            label="Errors"
-            hint="Agent hit an error"
+            label="오류"
+            hint="에이전트에 오류가 발생했습니다"
             checked={settings.notifyError}
             disabled={!anyChannel}
             onToggle={(v) => onChange({ notifyError: v })}
           />
           <Toggle
-            label="Session completed"
-            hint="Agent session ended"
+            label="세션 완료"
+            hint="에이전트 세션이 종료되었습니다"
             checked={settings.notifyCompleted}
             disabled={!anyChannel}
             onToggle={(v) => onChange({ notifyCompleted: v })}
           />
           <Toggle
-            label="Context nearly full"
-            hint="Main agent's context window passed 85% — a compaction is coming"
+            label="컨텍스트 거의 가득 참"
+            hint="메인 에이전트의 컨텍스트 윈도우가 85%를 넘었습니다 — 곧 컴팩션이 실행됩니다"
             checked={settings.notifyContext}
             disabled={!anyChannel}
             onToggle={(v) => onChange({ notifyContext: v })}
           />
         </div>
 
-        <div className="settings-section-label">Map</div>
+        <div className="settings-section-label">맵</div>
         <Toggle
-          label="Context bars"
-          hint="Show each hero's context-window occupancy above its name"
+          label="컨텍스트 막대"
+          hint="각 영웅의 이름 위에 컨텍스트 윈도우 사용량을 표시합니다"
           checked={settings.showContextBars}
           onToggle={(v) => onChange({ showContextBars: v })}
         />
 
-        <div className="settings-section-label">Sound</div>
+        <div className="settings-section-label">소리</div>
         <Toggle
-          label="Play a sound"
-          hint="Chime alongside notifications"
+          label="소리 재생"
+          hint="알림과 함께 알림음을 울립니다"
           checked={settings.soundEnabled}
           onToggle={(v) => onChange({ soundEnabled: v })}
         />
         <div className="settings-row" data-dim={!settings.soundEnabled}>
-          <span className="settings-toggle-label">Volume</span>
+          <span className="settings-toggle-label">볼륨</span>
           <input
             className="settings-volume"
             type="range"
@@ -290,21 +290,21 @@ export function SettingsPanel({ settings, onChange, onClose }: SettingsPanelProp
             value={settings.volume}
             disabled={!settings.soundEnabled}
             onChange={(e) => onChange({ volume: Number(e.target.value) })}
-            aria-label="Notification volume"
+            aria-label="알림 볼륨"
           />
           <span className="settings-volume-value">{Math.round(settings.volume * 100)}%</span>
         </div>
 
-        <div className="settings-section-label">Do not disturb</div>
+        <div className="settings-section-label">방해 금지</div>
         <Toggle
-          label="Mute everything"
-          hint="Temporarily silence all notifications and sounds"
+          label="모두 음소거"
+          hint="모든 알림과 소리를 일시적으로 끕니다"
           checked={settings.doNotDisturb}
           onToggle={(v) => onChange({ doNotDisturb: v })}
         />
 
         <p className="settings-foot">
-          Preferences are saved locally in this browser. Nothing is uploaded.
+          설정은 이 브라우저에 로컬로 저장됩니다. 아무것도 업로드되지 않습니다.
         </p>
       </div>
     </div>

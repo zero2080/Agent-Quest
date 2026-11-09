@@ -80,31 +80,31 @@ export function ReleaseBanner() {
   }
 
   return (
-    <section className="release-banner" aria-label="App update">
+    <section className="release-banner" aria-label="앱 업데이트">
       <div className="release-banner-header">
-        <p role="status"><strong>Agent Quest {release.version} is available</strong><span>You’re using {currentVersion}.</span></p>
-        <button type="button" onClick={remindTomorrow}>Remind me tomorrow</button>
+        <p role="status"><strong>Agent Quest {release.version} 사용 가능</strong><span>현재 {currentVersion}을(를) 사용 중입니다.</span></p>
+        <button type="button" onClick={remindTomorrow}>내일 다시 알림</button>
       </div>
       <details key={release.version} className="release-banner-details">
-        <summary>What’s new &amp; how to update</summary>
-        <h2>What’s new</h2>
+        <summary>새로운 기능 &amp; 업데이트 방법</summary>
+        <h2>새로운 기능</h2>
         <div className="release-banner-notes">
           {release.notes.trim() ? (
             <ReactMarkdown skipHtml disallowedElements={['img']} components={{
               a: ({ children, href }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
             }}>{release.notes}</ReactMarkdown>
-          ) : <p>No release notes were provided.</p>}
+          ) : <p>제공된 릴리스 노트가 없습니다.</p>}
         </div>
-        <a href={release.url} target="_blank" rel="noopener noreferrer">View release on GitHub ↗</a>
-        <h2>Update manually</h2>
+        <a href={release.url} target="_blank" rel="noopener noreferrer">GitHub에서 릴리스 보기 ↗</a>
+        <h2>수동 업데이트</h2>
         <ol>
-          <li>On the computer running Agent Quest, stop the app with <kbd>Ctrl+C</kbd> in its terminal.</li>
-          <li>Run <code>agentquest update</code>.</li>
-          <li>Start it again with <code>agentquest</code>, then refresh this page.</li>
+          <li>Agent Quest를 실행 중인 컴퓨터의 터미널에서 <kbd>Ctrl+C</kbd>로 앱을 중지합니다.</li>
+          <li><code>agentquest update</code>를 실행합니다.</li>
+          <li><code>agentquest</code>로 다시 시작한 뒤 이 페이지를 새로고침합니다.</li>
         </ol>
-        <p>Without the shortcut, open your Agent Quest folder and run:</p>
+        <p>단축 명령이 없다면 Agent Quest 폴더를 열고 다음을 실행합니다:</p>
         <pre><code>{'git pull --ff-only && bun install\nbun start'}</code></pre>
-        <p className="release-banner-hint">The updater follows main. If Git reports local changes or a conflict, keep your changes and resolve it before continuing. Nothing updates automatically.</p>
+        <p className="release-banner-hint">업데이터는 main 브랜치를 따릅니다. Git이 로컬 변경 사항이나 충돌을 보고하면 변경 사항을 보존하고 해결한 뒤 계속 진행하세요. 자동으로 업데이트되는 것은 없습니다.</p>
       </details>
     </section>
   );

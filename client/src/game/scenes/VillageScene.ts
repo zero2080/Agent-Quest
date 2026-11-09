@@ -99,7 +99,7 @@ export class VillageScene extends Phaser.Scene {
     // the rest of create() (input, overlays, listeners) doesn't depend on it.
     void this.bootstrapWorld().catch((error: unknown) => {
       console.error('[VillageScene] World initialization failed', error);
-      setStartupStatus('Unable to load the village. Please reload the page to try again.');
+      setStartupStatus('마을을 불러올 수 없습니다. 페이지를 새로 고쳐 다시 시도해 주세요.');
     });
 
     // Set world bounds and fit the village into the viewport, then center the

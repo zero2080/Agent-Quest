@@ -23,7 +23,7 @@ export class EditorBootScene extends Phaser.Scene {
     this.statusText = this.add.text(
       this.cameras.main.centerX,
       this.cameras.main.centerY,
-      'Loading editor\u2026',
+      '에디터를 불러오는 중\u2026',
       { fontSize: '18px', color: '#C4A35A', fontFamily: 'Cinzel, serif', resolution: 2 },
     ).setOrigin(0.5);
 
@@ -67,7 +67,7 @@ export class EditorBootScene extends Phaser.Scene {
       if (!this.initialMap.settings) this.initialMap.settings = { heroScale: 0.50 };
 
       // 4. Queue asset loads based on manifest
-      if (this.statusText !== null) this.statusText.setText('Loading textures\u2026');
+      if (this.statusText !== null) this.statusText.setText('텍스처를 불러오는 중\u2026');
       this.queueAssets(this.manifest);
 
       this.load.once(Phaser.Loader.Events.COMPLETE, () => {
@@ -91,7 +91,7 @@ export class EditorBootScene extends Phaser.Scene {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (this.statusText !== null) {
-        this.statusText.setText(`Failed to load: ${msg}`);
+        this.statusText.setText(`불러오기 실패: ${msg}`);
         this.statusText.setColor('#8B2500');
       }
     }

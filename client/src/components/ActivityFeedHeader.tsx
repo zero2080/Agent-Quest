@@ -17,14 +17,14 @@ interface ActivityFeedHeaderProps {
 }
 
 const PILL_ORDER: { id: ActionFilter; label: string }[] = [
-  { id: 'messages', label: 'Messages' },
-  { id: 'errors',   label: 'Errors'   },
-  { id: 'edits',    label: 'Edits'    },
-  { id: 'bash',     label: 'Bash'     },
-  { id: 'reads',    label: 'Reads'    },
-  { id: 'agent',    label: 'Agent'    },
-  { id: 'skills',   label: 'Skills'   },
-  { id: 'other',    label: 'Other'    },
+  { id: 'messages', label: '메시지' },
+  { id: 'errors',   label: '오류'   },
+  { id: 'edits',    label: '편집'    },
+  { id: 'bash',     label: '명령'     },
+  { id: 'reads',    label: '읽기'    },
+  { id: 'agent',    label: '에이전트'    },
+  { id: 'skills',   label: '스킬'   },
+  { id: 'other',    label: '기타'    },
 ];
 
 export function ActivityFeedHeader({
@@ -51,9 +51,9 @@ export function ActivityFeedHeader({
     <div className="feed-header">
       <div className="feed-header-row">
         <span className="feed-title">
-          Activity Feed
+          활동 피드
           {foldState === 'closed' && newCount > 0 && (
-            <span className="feed-new-badge" aria-live="polite">{newCount} new</span>
+            <span className="feed-new-badge" aria-live="polite">새 항목 {newCount}개</span>
           )}
         </span>
 
@@ -62,21 +62,21 @@ export function ActivityFeedHeader({
         <div className="feed-fold-buttons">
           <button
             type="button"
-            aria-label="Full"
+            aria-label="전체 보기"
             aria-pressed={foldState === 'full'}
             className={`feed-fold-btn ${foldState === 'full' ? 'active' : ''}`}
             onClick={() => onFoldChange('full')}
           >▭</button>
           <button
             type="button"
-            aria-label="Compact"
+            aria-label="간략히 보기"
             aria-pressed={foldState === 'compact'}
             className={`feed-fold-btn ${foldState === 'compact' ? 'active' : ''}`}
             onClick={() => onFoldChange('compact')}
           >▬</button>
           <button
             type="button"
-            aria-label="Close"
+            aria-label="닫기"
             aria-pressed={foldState === 'closed'}
             className={`feed-fold-btn ${foldState === 'closed' ? 'active' : ''}`}
             onClick={() => onFoldChange('closed')}
@@ -99,7 +99,7 @@ export function ActivityFeedHeader({
             <span className="feed-agent-chip">
               <HeroAvatar agent={filteredAgent} size={14} />
               <span>{filteredAgent.name}</span>
-              <button type="button" aria-label="Clear agent filter" className="feed-chip-close" onClick={onClearAgentFilter}>×</button>
+              <button type="button" aria-label="에이전트 필터 지우기" className="feed-chip-close" onClick={onClearAgentFilter}>×</button>
             </span>
           )}
         </div>

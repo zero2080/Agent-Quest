@@ -1,6 +1,6 @@
 import { useEffect, useRef, type CSSProperties } from 'react';
 import { getActiveTheme } from '../game/themes/registry';
-import { HERO_COLOR_SPRITE_BASE, type AgentState } from '../types/agent';
+import { HERO_CLASS_LABEL, HERO_COLOR_SPRITE_BASE, type AgentState } from '../types/agent';
 
 interface HeroAvatarProps {
   agent: AgentState;
@@ -56,9 +56,9 @@ export function HeroAvatar({ agent, size = DEFAULT_SIZE, className, title }: Her
     <div
       ref={ref}
       className={className}
-      title={title ?? agent.heroClass}
+      title={title ?? HERO_CLASS_LABEL[agent.heroClass]}
       role="img"
-      aria-label={`${agent.heroClass} ${agent.name}`}
+      aria-label={`${HERO_CLASS_LABEL[agent.heroClass]} ${agent.name}`}
       style={{
         backgroundImage: `url('${preview.url}')`,
         backgroundSize,

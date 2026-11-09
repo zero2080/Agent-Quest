@@ -19,7 +19,7 @@ export function ContextMeter({ context, size = 'full' }: ContextMeterProps) {
   const color = CONTEXT_LEVEL_COLOR[level];
   const width = Math.min(100, Math.max(1, pct));
   const rounded = Math.round(pct);
-  const title = `${formatTokens(context.used)} / ${formatTokens(context.window ?? 0)} tokens (${rounded}%)`;
+  const title = `${formatTokens(context.used)} / ${formatTokens(context.window ?? 0)} 토큰 (${rounded}%)`;
   return (
     <span
       className={`ctx-meter ctx-meter--${size} ctx-level-${level}`}
@@ -28,7 +28,7 @@ export function ContextMeter({ context, size = 'full' }: ContextMeterProps) {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={rounded}
-      aria-label="Context window usage"
+      aria-label="컨텍스트 윈도우 사용량"
     >
       <span className="ctx-meter-track">
         <span className="ctx-meter-fill" style={{ width: `${width}%`, background: color }} />

@@ -17,11 +17,11 @@ export function EditorTopBar() {
   };
 
   const statusText = (() => {
-    if (saveError !== null) return `Save error: ${saveError}`;
-    if (saving) return 'Saving...';
-    if (dirty) return 'Unsaved changes';
-    if (lastSavedAt !== null) return `Saved ${formatTime(lastSavedAt)}`;
-    return 'Ready';
+    if (saveError !== null) return `저장 오류: ${saveError}`;
+    if (saving) return '저장 중...';
+    if (dirty) return '저장되지 않은 변경 사항';
+    if (lastSavedAt !== null) return `${formatTime(lastSavedAt)} 저장됨`;
+    return '준비됨';
   })();
 
   const statusClass = saveError !== null
@@ -38,13 +38,13 @@ export function EditorTopBar() {
   };
 
   const onClearMap = () => {
-    if (confirm('Clear the map? Terrain, decorations, paths, and NPCs will be wiped. You will still need to Save to persist.')) {
+    if (confirm('맵을 비우시겠습니까? 지형, 장식, 길, NPC가 모두 삭제됩니다. 유지하려면 저장을 눌러야 합니다.')) {
       editorBridge.emit('ed:action', 'reset-all');
     }
   };
 
   const onLoadTemplate = () => {
-    if (confirm('Load the shipped template into this slot? Unsaved changes will be lost. You will still need to Save to persist.')) {
+    if (confirm('기본 템플릿을 이 슬롯에 불러오시겠습니까? 저장되지 않은 변경 사항은 사라집니다. 유지하려면 저장을 눌러야 합니다.')) {
       editorBridge.emit('ed:action', 'load-template');
     }
   };
@@ -64,7 +64,7 @@ export function EditorTopBar() {
   return (
     <div className="editor-topbar">
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div className="editor-topbar-title">Map Editor</div>
+        <div className="editor-topbar-title">맵 에디터</div>
         <div className="editor-slot-tabs">
           {slotInfo.map((info) => {
             const isCurrentSlot = info.slot === currentSlot;
@@ -77,7 +77,7 @@ export function EditorTopBar() {
               <button
                 key={info.slot}
                 className={classes}
-                title={info.isEmpty ? `Slot ${info.slot} (empty)` : `${info.name}${info.isActive ? ' (active)' : ''}`}
+                title={info.isEmpty ? `슬롯 ${info.slot} (비어 있음)` : `${info.name}${info.isActive ? ' (활성)' : ''}`}
                 onClick={() => onSlotClick(info)}
               >
                 {getSlotLabel(info)}
@@ -88,23 +88,23 @@ export function EditorTopBar() {
       </div>
       <div className="editor-topbar-actions">
         <span className={statusClass}>{statusText}</span>
-        <button className="editor-btn primary" onClick={onSave} disabled={saving}>Save</button>
+        <button className="editor-btn primary" onClick={onSave} disabled={saving}>저장</button>
         <button
           className="editor-btn"
           onClick={onSetActive}
-          title="Set this slot as the active map for the dashboard"
+          title="이 슬롯을 대시보드의 활성 맵으로 설정"
         >
-          Set Active {currentSlot === activeSlot ? '\u2605' : ''}
+          활성화 {currentSlot === activeSlot ? '\u2605' : ''}
         </button>
         <button
           className="editor-btn"
           onClick={onLoadTemplate}
-          title="Load the shipped template map into this slot (replaces current content)"
+          title="기본 템플릿 맵을 이 슬롯에 불러오기 (현재 내용을 대체)"
         >
-          Load Template
+          템플릿 불러오기
         </button>
-        <button className="editor-btn danger" onClick={onClearMap}>Clear Map</button>
-        <a className="editor-btn" href="/" style={{ textDecoration: 'none' }}>Back to Village</a>
+        <button className="editor-btn danger" onClick={onClearMap}>맵 비우기</button>
+        <a className="editor-btn" href="/" style={{ textDecoration: 'none' }}>마을로 돌아가기</a>
       </div>
     </div>
   );

@@ -70,7 +70,7 @@ export function Minimap({ agents }: MinimapProps) {
 
   return (
     <div className="minimap">
-      <div className="minimap-title">Map</div>
+      <div className="minimap-title">맵</div>
       <canvas ref={canvasRef} className="minimap-canvas" width={180} height={120} />
     </div>
   );

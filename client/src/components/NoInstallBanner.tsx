@@ -43,17 +43,17 @@ export function NoInstallBanner({ configDirs, connected }: Props) {
     <div className="no-install-banner" role="status">
       <span className="no-install-icon" aria-hidden>⚠</span>
       <div className="no-install-body">
-        <div className="no-install-title">No Claude Code or Codex installation detected</div>
+        <div className="no-install-title">Claude Code 또는 Codex 설치가 감지되지 않았습니다</div>
         <div className="no-install-text">
-          The server found no <code>~/.claude*</code> or <code>~/.codex</code> directory with session logs.
-          {' '}Start a Claude Code or Codex session to see heroes appear here.
+          서버가 세션 로그가 있는 <code>~/.claude*</code> 또는 <code>~/.codex</code> 디렉터리를 찾지 못했습니다.
+          {' '}Claude Code 또는 Codex 세션을 시작하면 여기에 영웅이 나타납니다.
         </div>
       </div>
       <button
         className="no-install-dismiss"
         type="button"
         onClick={onDismiss}
-        aria-label="Dismiss"
+        aria-label="닫기"
       >
         ×
       </button>

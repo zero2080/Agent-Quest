@@ -4,6 +4,18 @@ import { eventBridge } from '../EventBridge';
 import { addCrispText } from '../text';
 import { getActiveTheme } from '../themes/registry';
 
+/** Korean subtitle shown under each building name. */
+const ACTIVITY_LABEL: Record<string, string> = {
+  reading: '읽기',
+  editing: '편집',
+  bash: '명령 실행',
+  thinking: '생각',
+  git: 'Git',
+  idle: '휴식',
+  debugging: '디버깅',
+  reviewing: '검토',
+};
+
 export class Building {
   readonly def: BuildingDef;
   readonly image: Phaser.GameObjects.Image;
@@ -50,7 +62,7 @@ export class Building {
 
     // Label above building — image top is at y - displayHeight (since origin is bottom)
     const labelY = def.y - this.image.displayHeight - 8;
-    const labelFont = '"Inter", system-ui, -apple-system, "Segoe UI", sans-serif';
+    const labelFont = '"Inter", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif';
     this.label = addCrispText(scene, def.x, labelY, def.label, {
       fontSize: '15px',
       fontStyle: '600',
@@ -63,7 +75,7 @@ export class Building {
 
     // Subtitle (description) below the label — pushed 5px down to clear the
     // title's descenders and avoid muddiness in the overlap zone.
-    addCrispText(scene, def.x, labelY + 5, def.activity, {
+    addCrispText(scene, def.x, labelY + 5, ACTIVITY_LABEL[def.activity] ?? def.activity, {
       fontSize: '11px',
       color: '#d8d8d8',
       fontFamily: labelFont,

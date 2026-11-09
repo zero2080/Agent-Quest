@@ -16,8 +16,8 @@ export function MouseHint() {
   };
 
   return (
-    <div className="mouse-hint" role="note" aria-label="Mouse controls">
-      <button className="mouse-hint-close" onClick={onDismiss} aria-label="Dismiss">×</button>
+    <div className="mouse-hint" role="note" aria-label="마우스 조작">
+      <button className="mouse-hint-close" onClick={onDismiss} aria-label="닫기">×</button>
       <div className="mouse-hint-row">
         <Mouse highlight="left" />
         <Arrow kind="tap" />

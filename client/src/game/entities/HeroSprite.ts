@@ -28,6 +28,18 @@ const SUBAGENT_SCALE = 0.8;
 const CONTEXT_BAR_W = 36;
 const CONTEXT_BAR_H = 4;
 
+/** Korean label for the activity text shown under each hero. */
+const ACTIVITY_LABEL: Record<AgentActivity, string> = {
+  reading: '읽는 중',
+  editing: '편집 중',
+  bash: '명령 실행 중',
+  thinking: '생각 중',
+  git: 'Git 작업 중',
+  idle: '휴식 중',
+  debugging: '디버깅 중',
+  reviewing: '검토 중',
+};
+
 const ACTIVITY_COLOR: Record<AgentActivity, string> = {
   idle:      '#888888',
   thinking:  '#C48BE8',
@@ -245,7 +257,7 @@ export class HeroSprite {
     // only when the UI is in mixed-provider mode.
 
     // Activity label below hero
-    this.activityText = addCrispText(scene, x, y + this.activityOffsetY, 'idle', {
+    this.activityText = addCrispText(scene, x, y + this.activityOffsetY, ACTIVITY_LABEL.idle, {
       fontSize: '12px',
       color: ACTIVITY_COLOR.idle,
       fontFamily: 'monospace',
@@ -411,13 +423,13 @@ export class HeroSprite {
 
   private refreshActivityVisual(): void {
     if (this.isErrorRecent) {
-      this.activityText.setText('error');
+      this.activityText.setText('오류');
       this.activityText.setColor(ERROR_COLOR);
     } else if (this.isWaiting) {
-      this.activityText.setText('waiting…');
+      this.activityText.setText('대기 중…');
       this.activityText.setColor(WAITING_COLOR);
     } else {
-      this.activityText.setText(this.currentActivity);
+      this.activityText.setText(ACTIVITY_LABEL[this.currentActivity]);
       this.activityText.setColor(ACTIVITY_COLOR[this.currentActivity]);
     }
     // Text width changed → re-center the activity/model pair on the hero.

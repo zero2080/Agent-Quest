@@ -773,8 +773,8 @@ export class TerrainRenderer {
 
   private drawSignposts(): void {
     const spots = [
-      { x: 1400, y: 1120, label: 'Welcome' },
-      { x: PLAZA.x + 120, y: PLAZA.y - 10, label: 'Plaza' },
+      { x: 1400, y: 1120, label: '환영' },
+      { x: PLAZA.x + 120, y: PLAZA.y - 10, label: '광장' },
     ];
     for (const s of spots) {
       if (this.onRoad(s.x, s.y, 8)) continue;

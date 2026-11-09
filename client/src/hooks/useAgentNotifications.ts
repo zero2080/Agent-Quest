@@ -24,19 +24,19 @@ function categoryEnabled(s: AppSettings, c: ChimeKind): boolean {
 
 function titleFor(a: AgentAlert): string {
   switch (a.category) {
-    case 'waiting': return `${a.name} — your turn`;
-    case 'error': return `${a.name} — error`;
-    case 'completed': return `${a.name} — done`;
-    case 'context': return `${a.name} — context nearly full`;
+    case 'waiting': return `${a.name} — 차례입니다`;
+    case 'error': return `${a.name} — 오류`;
+    case 'completed': return `${a.name} — 완료`;
+    case 'context': return `${a.name} — 컨텍스트 거의 가득 참`;
   }
 }
 
 function bodyFor(a: AgentAlert): string {
   switch (a.category) {
-    case 'waiting': return 'Finished its turn and is waiting for you.';
-    case 'error': return 'Hit an error.';
-    case 'completed': return 'Session completed.';
-    case 'context': return 'Context window is above 85% — expect a compaction soon.';
+    case 'waiting': return '차례를 마치고 기다리고 있습니다.';
+    case 'error': return '오류가 발생했습니다.';
+    case 'completed': return '세션이 완료되었습니다.';
+    case 'context': return '컨텍스트 윈도우가 85%를 넘었습니다 — 곧 컴팩션이 예상됩니다.';
   }
 }
 

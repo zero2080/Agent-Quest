@@ -23,8 +23,8 @@ export function TilePalette() {
   if (manifest === null) {
     return (
       <div className="editor-tile-palette">
-        <div className="editor-palette-header">Palette</div>
-        <div style={{ color: '#888', fontSize: 11 }}>Loading assets...</div>
+        <div className="editor-palette-header">팔레트</div>
+        <div style={{ color: '#888', fontSize: 11 }}>에셋을 불러오는 중...</div>
       </div>
     );
   }
@@ -94,7 +94,7 @@ export function TilePalette() {
         onClick={() => setTerrainExpanded((v) => !v)}
       >
         <span className="editor-palette-caret">{terrainExpanded ? '\u25BE' : '\u25B8'}</span>
-        Terrain Tileset
+        지형 타일셋
       </button>
       {terrainExpanded && (
         <>
@@ -129,7 +129,7 @@ export function TilePalette() {
                       backgroundSize: bgSize,
                       backgroundPosition: bgPos,
                     }}
-                    title={`Frame ${frame}`}
+                    title={`프레임 ${frame}`}
                     onClick={() => onTileClick(tileset, frame)}
                   />
                 );
@@ -147,7 +147,7 @@ export function TilePalette() {
           onClick={() => setDecorationsExpanded((v) => !v)}
         >
           <span className="editor-palette-caret">{decorationsExpanded ? '\u25BE' : '\u25B8'}</span>
-          Decorations
+          장식
         </button>
         {decorationsExpanded && (
           <>
@@ -159,10 +159,10 @@ export function TilePalette() {
               />
               <div className="editor-palette-decorations-grid">
                 {selectedFolder === '' && (
-                  <p className="editor-palette-hint">Select a folder on the left to see assets.</p>
+                  <p className="editor-palette-hint">왼쪽에서 폴더를 선택하면 에셋이 표시됩니다.</p>
                 )}
                 {selectedFolder !== '' && decorations.length === 0 && (
-                  <p className="editor-palette-hint">No assets in this folder.</p>
+                  <p className="editor-palette-hint">이 폴더에는 에셋이 없습니다.</p>
                 )}
                 {decorations.map((d) => {
                   const hasFrames = d.frameWidth !== undefined && d.frameHeight !== undefined && d.frameWidth > 0 && d.frameHeight > 0;
@@ -185,7 +185,7 @@ export function TilePalette() {
             </div>
             {decorationBrush !== null && (
               <div className="editor-row" style={{ marginTop: 4 }}>
-                <label>Scale</label>
+                <label>크기</label>
                 <input
                   type="range"
                   min="0.1"
@@ -337,7 +337,7 @@ function NpcPalette({ manifest, npcBrush }: NpcPaletteProps) {
 
   return (
     <div className="editor-tile-palette">
-      <div className="editor-palette-header">NPC Units</div>
+      <div className="editor-palette-header">NPC 유닛</div>
 
       {npcUnits.map((unit) => (
         <div key={unit}>
@@ -387,9 +387,9 @@ function NpcPalette({ manifest, npcBrush }: NpcPaletteProps) {
       ))}
 
       <div className="editor-palette-section" style={{ marginTop: 8 }}>
-        <div className="editor-palette-header">Brush Settings</div>
+        <div className="editor-palette-header">브러시 설정</div>
         <div className="editor-row" style={{ marginTop: 4 }}>
-          <label>Scale</label>
+          <label>크기</label>
           <input
             type="range"
             min="0.1"
@@ -401,7 +401,7 @@ function NpcPalette({ manifest, npcBrush }: NpcPaletteProps) {
           <span style={{ fontSize: 11, minWidth: 32, textAlign: 'right' }}>{currentScale.toFixed(2)}</span>
         </div>
         <div className="editor-row" style={{ marginTop: 4 }}>
-          <label>Wander</label>
+          <label>배회 반경</label>
           <input
             type="range"
             min="50"

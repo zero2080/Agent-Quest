@@ -28,11 +28,11 @@ export function DecorationDetail({ decoration }: Props) {
           checked={animated}
           onChange={(e) => updateBrush({ animated: e.target.checked })}
         />
-        <span>Animate on place</span>
+        <span>배치 시 애니메이션</span>
       </label>
       {animated && (
         <label className="decoration-detail-row">
-          <span>Animation</span>
+          <span>애니메이션</span>
           <select
             value={chosen}
             onChange={(e) => updateBrush({ animation: e.target.value })}

@@ -13,7 +13,7 @@ if (isEditor) dismissStartupLoader();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {isEditor ? (
-      <Suspense fallback={<div style={{ color: '#C4A35A', fontFamily: 'monospace', padding: 40 }}>Loading editor…</div>}>
+      <Suspense fallback={<div style={{ color: '#C4A35A', fontFamily: 'monospace', padding: 40 }}>에디터 불러오는 중…</div>}>
         <EditorApp />
       </Suspense>
     ) : (

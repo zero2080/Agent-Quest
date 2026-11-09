@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import type { AgentState } from '../types/agent';
+import { HERO_CLASS_LABEL, type AgentState } from '../types/agent';
 import { BUILDING_DEFS } from '../game/data/building-layout';
 import './BuildingInfoPanel.css';
 
@@ -66,7 +66,7 @@ export function BuildingInfoPanel({ buildingId, anchor, agents, onClose }: Build
       </div>
 
       <div className="building-info-section">
-        <div className="building-info-section-title">Triggers</div>
+        <div className="building-info-section-title">트리거</div>
         <div className="building-info-tools">
           {building.toolCalls.map((tc) => (
             <span key={tc} className="building-info-tool-tag">{tc}</span>
@@ -80,18 +80,18 @@ export function BuildingInfoPanel({ buildingId, anchor, agents, onClose }: Build
           onClick={() => setAgentsExpanded((prev) => !prev)}
         >
           <span className={`building-info-chevron ${agentsExpanded ? 'expanded' : ''}`}>&#x25B6;</span>
-          <span>Agents Here ({agentsHere.length})</span>
+          <span>여기 있는 에이전트 ({agentsHere.length})</span>
         </button>
         {agentsExpanded && (
           agentsHere.length === 0 ? (
-            <div className="building-info-empty">No agents currently here</div>
+            <div className="building-info-empty">현재 여기에 에이전트가 없습니다</div>
           ) : (
             <div className="building-info-agents">
               {agentsHere.map((a) => (
                 <div key={a.id} className="building-info-agent">
                   <span className="building-info-agent-dot" />
                   <span className="building-info-agent-name">{a.name}</span>
-                  <span className="building-info-agent-class">{a.heroClass}</span>
+                  <span className="building-info-agent-class">{HERO_CLASS_LABEL[a.heroClass]}</span>
                 </div>
               ))}
             </div>

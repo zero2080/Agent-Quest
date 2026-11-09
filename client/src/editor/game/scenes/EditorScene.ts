@@ -298,7 +298,7 @@ export class EditorScene extends Phaser.Scene {
     g.lineStyle(2, stroke, 1);
     g.strokeCircle(x, y, 5);
 
-    const label = this.add.text(x, y + 10, isSet ? 'SPAWN' : 'SPAWN (default)', {
+    const label = this.add.text(x, y + 10, isSet ? '스폰' : '스폰 (기본값)', {
       fontFamily: 'monospace',
       fontSize: '12px',
       color: isSet ? '#F5E4B0' : '#BBBBBB',
@@ -1363,7 +1363,7 @@ export class EditorScene extends Phaser.Scene {
       }
       const body = (await res.json()) as { ok: boolean; updatedAt?: number; error?: string };
       if (body.ok === false) {
-        editorBridge.emit('ed:save:error', body.error ?? 'unknown error');
+        editorBridge.emit('ed:save:error', body.error ?? '알 수 없는 오류');
         return;
       }
       this.dirty = false;
@@ -1440,7 +1440,7 @@ export class EditorScene extends Phaser.Scene {
   private async loadTemplate(): Promise<void> {
     try {
       const res = await fetch(`${SERVER_URL}/api/map/template`);
-      if (res.status === 204) throw new Error('No template available');
+      if (res.status === 204) throw new Error('사용할 수 있는 템플릿이 없습니다');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       this.mapConfig = (await res.json()) as MapConfig;
       if (!this.mapConfig.npcs) this.mapConfig.npcs = [];

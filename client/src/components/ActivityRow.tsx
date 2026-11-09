@@ -73,7 +73,7 @@ function ActivityRowImpl({
         <button
           type="button"
           className="feed-row-avatar"
-          aria-label={`Select agent ${agentName}`}
+          aria-label={`에이전트 ${agentName} 선택`}
           onClick={() => onSelectAgent(agent.id)}
         >
           <HeroAvatar agent={agent} size="inherit" />
@@ -86,7 +86,7 @@ function ActivityRowImpl({
             <button
               type="button"
               className="feed-agent-name"
-              aria-label={`Filter feed to ${agentName}`}
+              aria-label={`${agentName}만 피드에 표시`}
               onClick={() => onFilterAgent(agent.id)}
               title={agentName}
               style={{ color: HERO_LABEL_COLOR[agent.heroColor] }}
@@ -100,7 +100,7 @@ function ActivityRowImpl({
                 color: SOURCE_BADGE_COLOR[agent.source],
                 background: `${SOURCE_BADGE_COLOR[agent.source]}26`,
               }}
-              aria-label={`source ${sourceBadgeLabel(agent)} · ${agent.source}`}
+              aria-label={`출처 ${sourceBadgeLabel(agent)} · ${agent.source}`}
             >
               {sourceBadgeLabel(agent)}
             </span>
@@ -115,7 +115,7 @@ function ActivityRowImpl({
                   color: badge.color,
                   background: `${badge.color}26`,
                 }}
-                aria-label={`model ${agent.model ?? ''}`}
+                aria-label={`모델 ${agent.model ?? ''}`}
                 title={agent.model}
               >
                 {badge.short}
@@ -147,9 +147,9 @@ function ActivityRowImpl({
           y={menu.y}
           onClose={closeMenu}
           actions={[
-            { label: 'Copy path', onClick: () => copy(absolute ?? entry.detail), enabled: detailIsPath },
-            { label: 'Copy detail', onClick: () => copy(entry.detail), enabled: true },
-            { label: 'Filter to this agent', onClick: () => { if (agent !== undefined) onFilterAgent(agent.id); closeMenu(); }, enabled: agent !== undefined },
+            { label: '경로 복사', onClick: () => copy(absolute ?? entry.detail), enabled: detailIsPath },
+            { label: '상세 내용 복사', onClick: () => copy(entry.detail), enabled: true },
+            { label: '이 에이전트만 표시', onClick: () => { if (agent !== undefined) onFilterAgent(agent.id); closeMenu(); }, enabled: agent !== undefined },
           ]}
         />
       )}
